@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <title>bs4 profile with messages and edit - Bootdey.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main/UserProfile.css' %}">
+    <!-- bootsrap icons cdn link  -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="profile-card-4 z-depth-3">
+                    <div class="card">
+                        <div class="card-body text-center bg-primary rounded-top">
+                            <div class="user-box ">
+                                <img src="{{student.userImg.url}}" alt="user avatar">
+                            </div>
+                            <h5 class="mb-1 text-white">{{student.user.first_name}} {{student.user.last_name}}
+                            </h5>
+                            {{currentUser}}
+                            <h6 class="text-light">{{workExperience.profession}}</h6>
+                        
+                                <button class="btn btn-danger">Appriciate</button>
+                                <button class="btn btn-success">Message</button>
+                        </div>
+                        <div class="">
+                            <ul class="list-group shadow-none">
+                                <li class="list-group-item">
+                                    <div class="list-icon">
+                                        <i class="fa-solid fa-chart-line"></i>
+                                    </div>
+                                    <div class="list-details">
+                                        <span><a href="#">{{workExperience.platform}}</a></span>
+                                        <small>@mudasir.amin.7989</small>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="list-icon">
+                                        <i class="fa fa-envelope"></i>
+                                    </div>
+                                    <div class="list-details">
+                                        <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                                                data-cfemail="533a3d353c13362b323e233f367d303c3e">Github</a></span>
+                                        <small>Email Address</small>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="list-icon">
+                                        <i class="fa fa-globe"></i>
+                                    </div>
+                                    <div class="list-details">
+                                        <span>www.example.com</span>
+                                        <small>Website Address</small>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="row text-center mt-4">
+                                <div class="col p-2">
+                                    <h4 class="mb-1 line-height-5">154</h4>
+                                    <small class="mb-0 font-weight-bold">Projects</small>
+                                </div>
+                                <div class="col p-2">
+                                    <h4 class="mb-1 line-height-5">2.2k</h4>
+                                    <small class="mb-0 font-weight-bold">Followers</small>
+                                </div>
+                                <div class="col p-2">
+                                    <h4 class="mb-1 line-height-5">9.1k</h4>
+                                    <small class="mb-0 font-weight-bold">Views</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center">
+                                <a href=""><i class="mr-2 fa-brands fa-facebook"></i></a>
+                                <a href=""><i class="mr-2 fa-brands fa-github"></i></i></a>
+                                <a href=""><i class="mr-2 fa-brands fa-google"></i></a>
+                                <a href=""><i class="mr-2 fa-brands fa-square-instagram"></i></a>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card z-depth-3">
+                    <div class="card-body">
+                        <ul class="nav nav-pills nav-pills-primary nav-justified">
+                            <li class="nav-item">
+                                <a href="javascript:void();" data-target="#profile" data-toggle="pill"
+                                    class="nav-link active show"><i class="icon-user"></i> <span
+                                        class="hidden-xs">Profile</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void();" data-target="#messages" data-toggle="pill"
+                                    class="nav-link"><i class="icon-envelope-open"></i> <span
+                                        class="hidden-xs">Messages</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void();" data-target="#edit" data-toggle="pill" class="nav-link"><i
+                                        class="icon-note"></i> <span class="hidden-xs">Edit</span></a>
+                            </li>
+                        </ul>
+                        <div class="tab-content p-3">
+                            <div class="tab-pane active show" id="profile">
+                                <h5 class="mb-3">User Profile</h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <!-- <h6>About</h6> -->
+                                            <h2>{{student.user.first_name}} {{student.user.last_name}}</h2>
+                                             <p>{{student.department}} <br></p>
+                                             <strong>University of Okara</strong>
+                                             <hr>
+                                             
+                                        </p>
+                                        <h5>Area of Interest</h5>   
+                                        <p>
+                                            {{student.chapter.title}}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <h6>Programming Languages 
+                                            <button type="button" class="btn btn-primary p-0 pl-1 pr-1" data-toggle="modal" data-target="#add_Programming_language"><i class=" fa-solid fa-pen-to-square" ></i></button>
+                                        </h6>
+                                        {% if programming_languages%}
+                                            {% for programming_language in programming_languages%}
+                                                <a href="javascript:void();" class="badge badge-dark badge-pill">{{programming_language.programming_language}}</a>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <hr>
+                                        <h6>Technologies</h6>
+                                                <a href="javascript:void();"
+                                                class="badge badge-dark badge-pill">{{workExperience.technology}}</a>
+                                                {% if technologies %}
+                                                    {% for technology in technologies %}
+                                                    <a href="javascript:void();"
+                                                    class="badge badge-dark badge-pill">{{technology.name}}</a>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                        <hr>
+                                        <span class="badge badge-primary"><i class="fa fa-user"></i> 900
+                                            Followers</span>
+                                        <span class="badge badge-success"><i class="fa fa-cog"></i> 43 Forks</span>
+                                        <span class="badge badge-danger"><i class="fa fa-eye"></i> 245 Views</span>
+                                    </div>
+                                    
+                                    
+                                    <div class="col-md-8">
+                                        <hr>
+                                        <h5 class="mt-2 mb-3">About my work experience</h5>
+                                        <!-- <h6>{{freelancer.user.first_name}} {{freelancer.user.last_name}} <small>({{workExperience.profession}})</small></h6> -->
+                                            <p style="border: 1px solid grey; border-radius: 10px; padding: 7px;">
+                                                {{student.about}}
+                                            </p>
+                                    </div>
+                                    <!-- <div class="col-md-1"></div> -->
+                                    <div class="col-md-3 ml-4" >
+                                        <hr>
+                                        <h5 class=" mt-2 mb-3">
+                                            Userfull Links</h5>
+                                        <div>
+                                            <a href="#"><b>Profile(Gig) </b><i class="fa-solid fa-user-secret"></i></a>
+                                        </div>
+                                        <div class="mt-3">
+                                            <a href="#"><b>Portfolio </b><i class="fa-solid fa-code-compare"></i></a>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane" id="messages">
+                                {% for pending_connection_user in pending_connection_users %}
+                                <div class="alert alert-info alert-dismissible" role="alert">
+                                    <!-- <button type="button" class="close" data-dismiss="alert">×</button> -->
+                                    <div class="alert-icon">
+                                        <i class="icon-info"></i>
+                                    </div>
+                                    <div class="alert-message d-flex justify-content-between">
+                                        <span><strong>@{{pending_connection_user.username}}</strong> sends a connection request.</span>
+                                        <div>
+                                        <form action="{% url 'confirm_connection' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{student.id}}"> 
+                                            <input type="hidden" name="request_student" value="{{pending_connection_user.id}}"> 
+                                            <input type="hidden" name="lable" value="reject"> 
+                                            <button type="submit" class="btn btn-outline-danger">Reject</button>
+                                        </form>
+                                        <form action="{% url 'confirm_connection' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{student.id}}"> 
+                                            <input type="hidden" name="request_student" value="{{pending_connection_user.id}}"> 
+                                            <input type="hidden" name="lable" value="accept"> 
+                                            <button type="submit" class="btn btn-outline-success">Accept</button>
+                                        </form>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <table class="table table-hover table-striped">
+                                    <tbody>
+                                        {% if chats %}
+                                            {% for chat in chats %}
+                                            <tr>
+                                                <td>
+                                                    <strong>{{chat.user.username}}</strong><br>
+                                                    <span class="float-right font-weight-bold">{{chat.datetime}}</span>
+                                                    {{chat.message}}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="edit">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Full name</label>
+                                        <div class="col-lg-5">
+                                            <input class="form-control" name="fname" type="text" value="{{student.user.first_name}}" placeholder="First name">
+                                        </div>
+                                        <!-- <label class="col-lg-2 col-form-label form-control-label">First name</label> -->
+                                        <div class="col-lg-4">
+                                            <input class="form-control" name="lname" type="text" value="{{student.user.last_name}}" placeholder="Last name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Department</label>
+                                        
+                                        <div class="col-lg-9">
+                                        <select class="form-select form-control" name="dept" aria-label="Default select example">
+                                            <option {% if not student.department %}selected{% endif %} selected>Open this select menu</option>
+                                            <option value="Software Engineering" {% if student.department == 'Software Engineering' %} selected {% endif %}>Software Engineering</option>
+                                            <option value="Computer Science" {% if student.department == 'Computer Science' %} selected {% endif %}>Computer Science</option>
+                                            <option value="Data Science" {% if student.department == 'Data Science' %} selected {% endif %}>Data Science</option>
+                                            <option value="Information Technology" {% if student.department == 'Information Technology' %} selected {% endif %}>Information Technology</option>
+                                            <option value="Remote Sciences" {% if student.department == 'Remote Sciences' %} selected {% endif %}>Remote Sciences</option>
+                                            <option value="BB-IT" {% if student.department == 'BB-IT' %} selected {% endif %}>BB-IT</option>
+                                          </select>
+                                        </div> 
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Semester</label>
+                                        
+                                        <div class="col-lg-9">
+                                        <select class="form-select form-control" name="semester" aria-label="Default select example">
+                                            <option value="" {% if not student.semester %}selected{% endif %}>Open this select menu</option>
+                                            <option value="1" {% if student.semester == 1 %}selected{% endif %}>1</option>
+                                            <option value="2" {% if student.semester == 2 %}selected{% endif %}>2</option>
+                                            <option value="3" {% if student.semester == 3 %}selected{% endif %}>3</option>
+                                            <option value="4" {% if student.semester == 4 %}selected{% endif %}>4</option>
+                                            <option value="5" {% if student.semester == 5 %}selected{% endif %}>5</option>
+                                            <option value="6" {% if student.semester == 6 %}selected{% endif %}>6</option>
+                                            <option value="7" {% if student.semester == 7 %}selected{% endif %}>7</option>
+                                            <option value="8" {% if student.semester == 8 %}selected{% endif %}>8</option>
+                                          </select>
+                                        </div> 
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Roll No</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="roll" type="text" value="{{student.roll_no}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">CGPA</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="cgpa" type="number" step="0.01"  value="{{student.cgpa}}">
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Change profile</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="profileImg" type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">CNIC</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="cnic" type="text" value="{{student.cnic}}" placeholder="CNIC without dashes">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Contact Info</label>
+                                        <div class="col-lg-5">
+                                            <input class="form-control" name="contact" type="number" value="{{student.contact}}" placeholder="Contact">
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <input class="form-control" name="whatsapp" type="number" value="{{student.whatsApp}}" placeholder="What's app">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">About</label>
+                                        <div class="col-lg-9">
+                                            <!-- <input class="form-control" type="text" value="jhonsanmark"> -->
+                                            <textarea class="form-control" name="about"  id="" cols="30" rows="2">{{student.about}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-5 mt-1">
+                                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                                        <div class="col-lg-9 ">
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                    <hr>
+                                    
+                                    <form  method="post">
+                                        {% csrf_token %}
+                                    <div class="form-group row ">
+                                        <label class="col-lg-3 col-form-label form-control-label">Old Password</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="oldPass" type="password" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">New Password</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="NewPass" type="password" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Confirm
+                                            password</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="Cpass" type="password" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                                        <div class="col-lg-9">
+                                            <!-- <input type="reset" class="btn btn-secondary" value="Cancel"> -->
+                                            <button type="submit" class="btn btn-primary" >Update Password</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+
+    </script>
+</body>
+
+</html>
