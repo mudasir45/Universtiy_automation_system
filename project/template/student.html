@@ -65,62 +65,67 @@
                         </ul>
                         <div class="tab-content p-3">
                             <div class="tab-pane active show" id="profile">
-                                <h2 class="mb-3">{{GPA.gpa}}</h2>
+                                <h2 class="mb-3"> <small> Current GPA = </small> {{GPA.gpa}}</h2>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <!-- <h6>About</h6> -->
                                         <!-- Example single danger button -->
+                                        <h3>Check Your Result</h3> <br>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Select subject to check result
+                                            Semester
                                             </button>
                                             <ul class="dropdown-menu">
-                                            {% for subject in Student.subjects.all %}
-                                            <li><a class="dropdown-item" href="#">{{subject.name}}</a></li>
-                                            {% endfor %}
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 1 %}">1</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 2 %}">2</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 3 %}">3</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 4 %}">4</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 5 %}">5</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 6 %}">6</a></li>
                                             </ul>
                                         </div>
 
-                                            <h2>{{student.user.first_name}} {{student.user.last_name}}</h2>
+                                            <!-- <h2>{{student.user.first_name}} {{student.user.last_name}}</h2>
                                              <p>{{student.department}} <br></p>
                                              <strong>University of Okara</strong>
-                                             <hr>
+                                             <hr> -->
                                              
-                                        </p>
+                                        <!-- </p>
                                         <h5>Area of Interest</h5>   
                                         <p>
                                             {{student.chapter.title}}
-                                        </p>
+                                        </p> -->
                                     </div>
-
-                                    <div class="col-md-6">
-                                        <h6>Programming Languages 
-                                            <button type="button" class="btn btn-primary p-0 pl-1 pr-1" data-toggle="modal" data-target="#add_Programming_language"><i class=" fa-solid fa-pen-to-square" ></i></button>
-                                        </h6>
-                                        {% if programming_languages%}
-                                            {% for programming_language in programming_languages%}
-                                                <a href="javascript:void();" class="badge badge-dark badge-pill">{{programming_language.programming_language}}</a>
-                                            {% endfor %}
-                                        {% endif %}
-                                        <hr>
-                                        <h6>Technologies</h6>
-                                                <a href="javascript:void();"
-                                                class="badge badge-dark badge-pill">{{workExperience.technology}}</a>
-                                                {% if technologies %}
-                                                    {% for technology in technologies %}
-                                                    <a href="javascript:void();"
-                                                    class="badge badge-dark badge-pill">{{technology.name}}</a>
+                                    <div class="col-md-7">
+                                        <table class="table border">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">Subject</th>
+                                                <th scope="col">Instructor</th>
+                                                <th scope="col">Marks</th>
+                                                <th scope="col">GPA</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for mark in Marks %}
+                                              <tr>
+                                                <th scope="row">{{mark.subject.name}}</th>
+                                                <td>
+                                                    {% for teacher in Teachers %} 
+                                                        {% if teacher.subject == mark.subject %}
+                                                           {{teacher}}
+                                                        {% endif %}
                                                     {% endfor %}
-                                                {% endif %}
+                                                </td>
 
-                                        <hr>
-                                        <span class="badge badge-primary"><i class="fa fa-user"></i> 900
-                                            Followers</span>
-                                        <span class="badge badge-success"><i class="fa fa-cog"></i> 43 Forks</span>
-                                        <span class="badge badge-danger"><i class="fa fa-eye"></i> 245 Views</span>
+                                                <td>{{mark.marks}}</td>
+                                                <td>{{mark.gpa}}</td>
+                                              </tr>
+                                              {% endfor %}
+                                            </tbody>
+                                          </table>
                                     </div>
-                                    
-                                    
+                               
                                     <div class="col-md-8">
                                         <hr>
                                         <h5 class="mt-2 mb-3">About my work experience</h5>

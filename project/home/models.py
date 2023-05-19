@@ -54,8 +54,10 @@ class subject(models.Model):
 class marks(models.Model):
     subject = models.ForeignKey(subject, on_delete=models.CASCADE, null=True, blank=True)
     student = models.ForeignKey(student, on_delete=models.CASCADE, null=True, blank=True)
+    instructor = models.ForeignKey('teachers', on_delete=models.CASCADE, null=True, blank=True)
     marks = models.IntegerField(null=True, blank=True)
     gpa = models.FloatField(null=True, blank=True)
+    smester = models.IntegerField(null=True, blank=True)
     def __str__(self) -> str:
         return self.subject.name
 
@@ -71,6 +73,7 @@ class teachers(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     designation = models.CharField(max_length=50, null=True, blank=True)
     department = models.ManyToManyField('department', blank=True)
+    subject = models.ForeignKey(subject, on_delete=models.CASCADE, null=True, blank=True)
     img = models.ImageField(upload_to='student', null=True, blank=True)
     def __str__(self) -> str:
         return self.user.first_name

@@ -8,6 +8,7 @@ from .models import attendence
 from .models import HOD
 from .models import marks
 from .models import gpa
+from .models import teachers
 
 # Create your views here.
 @login_required
@@ -17,7 +18,6 @@ def home(request):
     Attendance = attendence.objects.filter(student = Student)
     Marks = marks.objects.filter(student = Student)
     GPA = gpa.objects.filter(student = Student).first()
-    # Subjects = student.subjects.all()
     context = {
         'Student': Student,
         'Attendance': Attendance,
@@ -37,3 +37,21 @@ def user_login(request):
             return redirect('home')
     return render(request, 'login.html')
 
+def checkMarks(request, smester):
+    curr_user = request.user
+    Student = student.objects.get(user = curr_user)
+    Attendance = attendence.objects.filter(student = Student)
+    Marks = marks.objects.filter(student = Student)
+    GPA = gpa.objects.filter(student = Student).first()
+    Teacher = teachers.objects.all()
+    
+    Marks = marks.objects.filter(smester = smester)
+    context = {
+        'Student': Student,
+        'Attendance': Attendance,
+        'Marks': Marks,
+        'GPA':GPA, 
+        'Marks':Marks,
+        'Teachers':Teacher,
+    }
+    return render(request, 'student.html', context)
