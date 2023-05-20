@@ -14,6 +14,8 @@ class student(models.Model):
     department = models.ForeignKey(department, on_delete=models.CASCADE, null=True, blank=True)
     subjects = models.ManyToManyField('subject', blank=True)
     section = models.CharField(max_length=10, null=True, blank=True)
+    smester = models.IntegerField(null=True, blank=True)
+    CNIC = models.IntegerField(null=True, blank=True)
     img = models.ImageField(upload_to='student', null=True, blank=True)
     
     def __str__(self) -> str:
@@ -64,10 +66,12 @@ class marks(models.Model):
 class attendence(models.Model):
     student = models.ForeignKey(student, on_delete=models.CASCADE, null=True, blank=True)
     subject = models.ForeignKey(subject, on_delete=models.CASCADE, null=True, blank=True)
-    date = models.DateField(auto_now=True)
+    smester = models.IntegerField(null=True, blank=True)
+    lacture = models.IntegerField(null=True, blank=True)
+    date = models.DateField()
     status = models.BooleanField(default=False)
     def __str__(self):
-        return self.student
+        return f'{self.student.user.first_name} - {self.subject}  - {self.lacture} - smester = {self.smester} ==> {self.status}'
 
 class teachers(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -91,5 +95,4 @@ class gpa(models.Model):
     gpa = models.FloatField(null=True, blank=True)
     def __str__(self) -> str:
         return self.student.user.first_name
-
 
