@@ -96,4 +96,3 @@ class gpa(models.Model):
     def __str__(self) -> str:
         return self.student.user.first_name
 
-

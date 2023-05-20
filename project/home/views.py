@@ -141,4 +141,8 @@ def teacher(request):
     curr_user = request.user
     Teacher = teachers.objects.get(user = curr_user)
     Students = student.objects.all()
-    
+    context = {
+        'Teacher': Teacher,
+        'Students': Students,
+    }
+    return render(request, 'teacher.html', context)

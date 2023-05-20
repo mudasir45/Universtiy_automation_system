@@ -8,4 +8,6 @@ urlpatterns = [
     path('CheckAttendence/', views.CheckAttendence, name='CheckAttendence'),
     path('updateStudentProflie/', views.updateStudentProflie, name='updateStudentProflie'),
     path('resetPassord/', views.resetPassord, name='resetPassord'),
+    
+    path('teacher/', views.teacher, name='teacher'),
 ]
