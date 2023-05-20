@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <title>bs4 profile with messages and edit - Bootdey.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="{% static 'UserProfile.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <!-- bootsrap icons cdn link  -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    
+    <!-- jquery CDN link  -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="profile-card-4 z-depth-3">
+                    <div class="card">
+                        <div class="card-body text-center bg-primary rounded-top">
+                            <div class="user-box ">
+                                <img src="{{Student.img.url}}" alt="user avatar">
+                            </div>
+                            <span class="badge badge-success"><i class="fas fa-user-graduate"></i> Student Portal</span>
+                            <h5 class="mb-1 text-white">{{Student.user.first_name}} {{Student.user.last_name}}</h5>
+                            <h6 class="text-light">{{Student.department}}</h6>
+                            
+                            <h3 class="text-light text-danger">University Of Okara</h3>
+                                <!-- <button class="btn btn-danger">Appriciate</button>
+                                <button class="btn btn-success">Message</button> -->
+                        </div>
+                        
+                        <div class="card-footer text-center">
+                                <a href=""><i class="mr-2 fa-brands fa-facebook"></i></a>
+                                <a href=""><i class="mr-2 fa-brands fa-github"></i></i></a>
+                                <a href=""><i class="mr-2 fa-brands fa-google"></i></a>
+                                <a href=""><i class="mr-2 fa-brands fa-square-instagram"></i></a>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card z-depth-3">
+                    <div class="card-body">
+                        <ul class="nav nav-pills nav-pills-primary nav-justified">
+                            <li class="nav-item">
+                                <a href="javascript:void();" data-target="#profile" data-toggle="pill"
+                                    class="nav-link active show"><i class="icon-user"></i> <span
+                                        class="hidden-xs">Profile</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void();" data-target="#messages" data-toggle="pill"
+                                    class="nav-link"><i class="icon-envelope-open"></i> <span
+                                        class="hidden-xs">Messages</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void();" data-target="#edit" data-toggle="pill" class="nav-link"><i
+                                        class="icon-note"></i> <span class="hidden-xs">Edit</span></a>
+                            </li>
+                        </ul>
+                        <div class="tab-content p-3">
+                            <div class="tab-pane active show" id="profile">
+                                <h2 class="mb-3"> <small> Current GPA = </small> {{GPA.gpa}}</h2>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <!-- <h6>About</h6> -->
+                                        <!-- Example single danger button -->
+                                        <h5>Check Your Result</h5> <br>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Semester
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 1 %}">1</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 2 %}">2</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 3 %}">3</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 4 %}">4</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 5 %}">5</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 6 %}">6</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 7 %}">7</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 8 %}">8</a></li>
+                                            </ul>
+                                        </div>
+
+                                            <!-- <h2>{{student.user.first_name}} {{student.user.last_name}}</h2>
+                                             <p>{{student.department}} <br></p>
+                                             <strong>University of Okara</strong>
+                                             <hr> -->
+                                             
+                                        <!-- </p>
+                                        <h5>Area of Interest</h5>   
+                                        <p>
+                                            {{student.chapter.title}}
+                                        </p> -->
+                                    </div>
+                                    <div class="col-md-7">
+                                        <table class="table border">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">Subject</th>
+                                                <th scope="col">Instructor</th>
+                                                <th scope="col">Marks</th>
+                                                <th scope="col">GPA</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for mark in Marks %}
+                                              <tr>
+                                                <th scope="row">{{mark.subject.name}}</th>
+                                                <td>
+                                                    {% for teacher in Teachers %} 
+                                                        {% if teacher.subject == mark.subject %}
+                                                           {{teacher}}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </td>
+
+                                                <td>{{mark.marks}}</td>
+                                                <td>{{mark.gpa}}</td>
+                                              </tr>
+                                              {% endfor %}
+                                            </tbody>
+                                          </table>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="row">
+                                   
+                                    <div class="col-md-8">
+                                        <hr>
+                                        <form action="CheckAttendence" id="Check-attendence">
+                                            {% csrf_token %}
+                                        <h5 class="mt-2 mb-3">Check Attendence </h5>
+                                        <div class="d-inline-block">
+                                            <select class="form-select mb-3 mr-2 border-1 smester1" name="smester" aria-label="Default select example">
+                                                <option selected>Smester</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-inline-block">
+                                            <select class="form-select mb-3  border-1" name="subject" aria-label="Default select example">
+                                                <option selected>Subject</option>
+                                                {% for subject in Subjects %}
+                                                    <option value="{{subject.id}}">{{subject.name}}</option>
+                                                    {% endfor %}
+
+                                            </select>
+                                            <input type="hidden" name="std_id" value="{{Student.id}}">
+                                            <button type="submit" class="btn btn-info">Submit</button>
+                                        </div>
+                                    </form>
+                                    </div>
+                                    <!-- <div class="col-md-1"></div> -->
+                                    <div class="col-md-12">
+                                        <div style="border: 1px solid grey; border-radius: 10px; padding: 7px;">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Lacture</th>
+                                                        <th scope="col">Date</th>
+                                                        <th scope="col">Subject</th>
+                                                        <th scope="col">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="attendance-details">
+                                                   
+                                                </tbody>
+                                            </table>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                           
+                    
+
+                        <script>
+                            $(document).ready(function() {
+                            $('#Check-attendence').on('submit', function(event) {
+                                event.preventDefault();  // Prevent form submission
+
+                                // Get the CSRF token value from the cookie
+                                var csrfToken = getCookie('csrftoken');
+
+                                // Get the form data
+                                var formData = $(this).serialize();
+
+                                // Append the CSRF token to the form data
+                                formData += '&csrfmiddlewaretoken=' + csrfToken;
+                                
+
+                                // Make the AJAX request
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/CheckAttendence/',
+                                    data: formData,
+                                    success: function(response) {
+                                        // Update the attendance details in the table
+                                        var tableBody = document.getElementById('attendance-details');
+                                        tableBody.innerHTML = ''; // Clear existing table rows
+
+                                        response.attendance.forEach(function(item, index) {
+                                        var newRow = document.createElement('tr');
+                                        var statusText = item.status ? 'Present' : 'Absent'; // Check status and set the corresponding text
+                                        newRow.innerHTML = '<th scope="row">' + item.lacture + '</th>' +
+                                            '<td>' + item.date + '</td>' +
+                                            '<td>' + item.subject + '</td>' +
+                                            '<td>' + statusText + '</td>';
+                                        tableBody.appendChild(newRow);
+
+                                            });
+                                        },
+                                        error: function(xhr) {
+                                            // Handle error
+                                            console.log(xhr.responseText);
+                                        }
+                                    });
+                            });
+
+                            // Function to get the CSRF token value from the cookie
+                            function getCookie(name) {
+                                var cookieValue = null;
+                                if (document.cookie && document.cookie !== '') {
+                                    var cookies = document.cookie.split(';');
+                                    for (var i = 0; i < cookies.length; i++) {
+                                        var cookie = cookies[i].trim();
+                                        // Check if the cookie name matches the csrfmiddlewaretoken format
+                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                            break;
+                                        }
+                                    }
+                                }
+                                return cookieValue;
+                            }
+
+                            
+});
+
+                        </script>
+                        
+                            
+                            
+
+
+                            <div class="tab-pane" id="messages">
+                                {% for pending_connection_user in pending_connection_users %}
+                                <div class="alert alert-info alert-dismissible" role="alert">
+                                    <!-- <button type="button" class="close" data-dismiss="alert">×</button> -->
+                                    <div class="alert-icon">
+                                        <i class="icon-info"></i>
+                                    </div>
+                                    <div class="alert-message d-flex justify-content-between">
+                                        <span><strong>@{{pending_connection_user.username}}</strong> sends a connection request.</span>
+                                        <div>
+                                        <form action="{% url 'confirm_connection' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{student.id}}"> 
+                                            <input type="hidden" name="request_student" value="{{pending_connection_user.id}}"> 
+                                            <input type="hidden" name="lable" value="reject"> 
+                                            <button type="submit" class="btn btn-outline-danger">Reject</button>
+                                        </form>
+                                        <form action="{% url 'confirm_connection' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{student.id}}"> 
+                                            <input type="hidden" name="request_student" value="{{pending_connection_user.id}}"> 
+                                            <input type="hidden" name="lable" value="accept"> 
+                                            <button type="submit" class="btn btn-outline-success">Accept</button>
+                                        </form>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <table class="table table-hover table-striped">
+                                    <tbody>
+                                        {% if chats %}
+                                            {% for chat in chats %}
+                                            <tr>
+                                                <td>
+                                                    <strong>{{chat.user.username}}</strong><br>
+                                                    <span class="float-right font-weight-bold">{{chat.datetime}}</span>
+                                                    {{chat.message}}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="edit">
+                                <form method="post" action="{% url 'updateStudentProflie' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Full name</label>
+                                        <div class="col-lg-5">
+                                            <input class="form-control" name="fname" type="text" value="{{Student.user.first_name}}" placeholder="First name">
+                                        </div>
+                                        <!-- <label class="col-lg-2 col-form-label form-control-label">First name</label> -->
+                                        <div class="col-lg-4">
+                                            <input class="form-control" name="lname" type="text" value="{{Student.user.last_name}}" placeholder="Last name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Semester</label>
+                                        
+                                        <div class="col-lg-9">
+                                        <select class="form-select form-control" name="semester" aria-label="Default select example">
+                                            <option value="" {% if not Student.semester %}selected{% endif %}>Open this select menu</option>
+                                            <option value="1" {% if Student.smester == 1 %}selected{% endif %}>1</option>
+                                            <option value="2" {% if Student.smester == 2 %}selected{% endif %}>2</option>
+                                            <option value="3" {% if Student.smester == 3 %}selected{% endif %}>3</option>
+                                            <option value="4" {% if Student.smester == 4 %}selected{% endif %}>4</option>
+                                            <option value="5" {% if Student.smester == 5 %}selected{% endif %}>5</option>
+                                            <option value="6" {% if Student.smester == 6 %}selected{% endif %}>6</option>
+                                            <option value="7" {% if Student.smester == 7 %}selected{% endif %}>7</option>
+                                            <option value="8" {% if Student.smester == 8 %}selected{% endif %}>8</option>
+                                          </select>
+                                        </div> 
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Roll No</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="roll" type="text" value="{{Student.roll_no}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">CGPA</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="cgpa" type="number" step="0.01"  value="{{GPA.gpa}}">
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Change profile</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="profileImg" type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">CNIC</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="cnic" type="text" value="{{Student.cnic}}" placeholder="CNIC without dashes">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-5 mt-1">
+                                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                                        <div class="col-lg-9 ">
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                    <hr>
+                                    
+                                    <form  method="post">
+                                        {% csrf_token %}
+                                    <div class="form-group row ">
+                                        <label class="col-lg-3 col-form-label form-control-label">Old Password</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="oldPass" type="password" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">New Password</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="NewPass" type="password" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label">Confirm
+                                            password</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" name="Cpass" type="password" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                                        <div class="col-lg-9">
+                                            <!-- <input type="reset" class="btn btn-secondary" value="Cancel"> -->
+                                            <button type="submit" class="btn btn-primary" >Update Password</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+</body>
+
+</html>

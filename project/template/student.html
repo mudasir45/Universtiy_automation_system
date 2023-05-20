@@ -12,11 +12,14 @@
     <!-- bootsrap icons cdn link  -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    
+    <!-- jquery CDN link  -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
     <div class="container">
-
+        {% include 'alert.html' %}
         <div class="row">
             <div class="col-lg-4">
                 <div class="profile-card-4 z-depth-3">
@@ -25,7 +28,7 @@
                             <div class="user-box ">
                                 <img src="{{Student.img.url}}" alt="user avatar">
                             </div>
-                            <span class="badge badge-success"><i class="fas fa-user-graduate"></i> Student</span>
+                            <span class="badge badge-success"><i class="fas fa-user-graduate"></i> Student Portal</span>
                             <h5 class="mb-1 text-white">{{Student.user.first_name}} {{Student.user.last_name}}</h5>
                             <h6 class="text-light">{{Student.department}}</h6>
                             
@@ -70,7 +73,7 @@
                                     <div class="col-md-5">
                                         <!-- <h6>About</h6> -->
                                         <!-- Example single danger button -->
-                                        <h3>Check Your Result</h3> <br>
+                                        <h5>Check Your Result</h5> <br>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             Semester
@@ -82,6 +85,8 @@
                                             <li><a class="dropdown-item" href="{% url 'checkMarks' 4 %}">4</a></li>
                                             <li><a class="dropdown-item" href="{% url 'checkMarks' 5 %}">5</a></li>
                                             <li><a class="dropdown-item" href="{% url 'checkMarks' 6 %}">6</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 7 %}">7</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 8 %}">8</a></li>
                                             </ul>
                                         </div>
 
@@ -125,31 +130,136 @@
                                             </tbody>
                                           </table>
                                     </div>
-                               
+                                    
+                                </div>
+
+                                <div class="row">
+                                   
                                     <div class="col-md-8">
                                         <hr>
-                                        <h5 class="mt-2 mb-3">About my work experience</h5>
-                                        <!-- <h6>{{freelancer.user.first_name}} {{freelancer.user.last_name}} <small>({{workExperience.profession}})</small></h6> -->
-                                            <p style="border: 1px solid grey; border-radius: 10px; padding: 7px;">
-                                                {{student.about}}
-                                            </p>
+                                        <form action="CheckAttendence" id="Check-attendence">
+                                            {% csrf_token %}
+                                        <h5 class="mt-2 mb-3">Check Attendence </h5>
+                                        <div class="d-inline-block">
+                                            <select class="form-select mb-3 mr-2 border-1 smester1" name="smester" aria-label="Default select example">
+                                                <option selected>Smester</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-inline-block">
+                                            <select class="form-select mb-3  border-1" name="subject" aria-label="Default select example">
+                                                <option selected>Subject</option>
+                                                {% for subject in Subjects %}
+                                                    <option value="{{subject.id}}">{{subject.name}}</option>
+                                                    {% endfor %}
+
+                                            </select>
+                                            <input type="hidden" name="std_id" value="{{Student.id}}">
+                                            <button type="submit" class="btn btn-info">Submit</button>
+                                        </div>
+                                    </form>
                                     </div>
                                     <!-- <div class="col-md-1"></div> -->
-                                    <div class="col-md-3 ml-4" >
-                                        <hr>
-                                        <h5 class=" mt-2 mb-3">
-                                            Userfull Links</h5>
-                                        <div>
-                                            <a href="#"><b>Profile(Gig) </b><i class="fa-solid fa-user-secret"></i></a>
-                                        </div>
-                                        <div class="mt-3">
-                                            <a href="#"><b>Portfolio </b><i class="fa-solid fa-code-compare"></i></a>
-
+                                    <div class="col-md-12">
+                                        <div style="border: 1px solid grey; border-radius: 10px; padding: 7px;">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Lacture</th>
+                                                        <th scope="col">Date</th>
+                                                        <th scope="col">Subject</th>
+                                                        <th scope="col">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="attendance-details">
+                                                   
+                                                </tbody>
+                                            </table>
+                                            
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
+                           
+                    
+
+                        <script>
+                            $(document).ready(function() {
+                            $('#Check-attendence').on('submit', function(event) {
+                                event.preventDefault();  // Prevent form submission
+
+                                // Get the CSRF token value from the cookie
+                                var csrfToken = getCookie('csrftoken');
+
+                                // Get the form data
+                                var formData = $(this).serialize();
+
+                                // Append the CSRF token to the form data
+                                formData += '&csrfmiddlewaretoken=' + csrfToken;
+                                
+
+                                // Make the AJAX request
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/CheckAttendence/',
+                                    data: formData,
+                                    success: function(response) {
+                                        // Update the attendance details in the table
+                                        var tableBody = document.getElementById('attendance-details');
+                                        tableBody.innerHTML = ''; // Clear existing table rows
+
+                                        response.attendance.forEach(function(item, index) {
+                                        var newRow = document.createElement('tr');
+                                        var statusText = item.status ? 'Present' : 'Absent'; // Check status and set the corresponding text
+                                        newRow.innerHTML = '<th scope="row">' + item.lacture + '</th>' +
+                                            '<td>' + item.date + '</td>' +
+                                            '<td>' + item.subject + '</td>' +
+                                            '<td>' + statusText + '</td>';
+                                        tableBody.appendChild(newRow);
+
+                                            });
+                                        },
+                                        error: function(xhr) {
+                                            // Handle error
+                                            console.log(xhr.responseText);
+                                        }
+                                    });
+                            });
+
+                            // Function to get the CSRF token value from the cookie
+                            function getCookie(name) {
+                                var cookieValue = null;
+                                if (document.cookie && document.cookie !== '') {
+                                    var cookies = document.cookie.split(';');
+                                    for (var i = 0; i < cookies.length; i++) {
+                                        var cookie = cookies[i].trim();
+                                        // Check if the cookie name matches the csrfmiddlewaretoken format
+                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                            break;
+                                        }
+                                    }
+                                }
+                                return cookieValue;
+                            }
+
+                            
+});
+
+                        </script>
+                        
+                            
+                            
+
+
                             <div class="tab-pane" id="messages">
                                 {% for pending_connection_user in pending_connection_users %}
                                 <div class="alert alert-info alert-dismissible" role="alert">
@@ -196,60 +306,45 @@
                                 </table>
                             </div>
                             <div class="tab-pane" id="edit">
-                                <form method="post">
+                                <form method="post" action="{% url 'updateStudentProflie' %}">
                                     {% csrf_token %}
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Full name</label>
                                         <div class="col-lg-5">
-                                            <input class="form-control" name="fname" type="text" value="{{student.user.first_name}}" placeholder="First name">
+                                            <input class="form-control" name="fname" type="text" value="{{Student.user.first_name}}" placeholder="First name">
                                         </div>
                                         <!-- <label class="col-lg-2 col-form-label form-control-label">First name</label> -->
                                         <div class="col-lg-4">
-                                            <input class="form-control" name="lname" type="text" value="{{student.user.last_name}}" placeholder="Last name">
+                                            <input class="form-control" name="lname" type="text" value="{{Student.user.last_name}}" placeholder="Last name">
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-lg-3 col-form-label form-control-label">Department</label>
-                                        
-                                        <div class="col-lg-9">
-                                        <select class="form-select form-control" name="dept" aria-label="Default select example">
-                                            <option {% if not student.department %}selected{% endif %} selected>Open this select menu</option>
-                                            <option value="Software Engineering" {% if student.department == 'Software Engineering' %} selected {% endif %}>Software Engineering</option>
-                                            <option value="Computer Science" {% if student.department == 'Computer Science' %} selected {% endif %}>Computer Science</option>
-                                            <option value="Data Science" {% if student.department == 'Data Science' %} selected {% endif %}>Data Science</option>
-                                            <option value="Information Technology" {% if student.department == 'Information Technology' %} selected {% endif %}>Information Technology</option>
-                                            <option value="Remote Sciences" {% if student.department == 'Remote Sciences' %} selected {% endif %}>Remote Sciences</option>
-                                            <option value="BB-IT" {% if student.department == 'BB-IT' %} selected {% endif %}>BB-IT</option>
-                                          </select>
-                                        </div> 
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Semester</label>
                                         
                                         <div class="col-lg-9">
                                         <select class="form-select form-control" name="semester" aria-label="Default select example">
-                                            <option value="" {% if not student.semester %}selected{% endif %}>Open this select menu</option>
-                                            <option value="1" {% if student.semester == 1 %}selected{% endif %}>1</option>
-                                            <option value="2" {% if student.semester == 2 %}selected{% endif %}>2</option>
-                                            <option value="3" {% if student.semester == 3 %}selected{% endif %}>3</option>
-                                            <option value="4" {% if student.semester == 4 %}selected{% endif %}>4</option>
-                                            <option value="5" {% if student.semester == 5 %}selected{% endif %}>5</option>
-                                            <option value="6" {% if student.semester == 6 %}selected{% endif %}>6</option>
-                                            <option value="7" {% if student.semester == 7 %}selected{% endif %}>7</option>
-                                            <option value="8" {% if student.semester == 8 %}selected{% endif %}>8</option>
+                                            <option value="" {% if not Student.semester %}selected{% endif %}>Open this select menu</option>
+                                            <option value="1" {% if Student.smester == 1 %}selected{% endif %}>1</option>
+                                            <option value="2" {% if Student.smester == 2 %}selected{% endif %}>2</option>
+                                            <option value="3" {% if Student.smester == 3 %}selected{% endif %}>3</option>
+                                            <option value="4" {% if Student.smester == 4 %}selected{% endif %}>4</option>
+                                            <option value="5" {% if Student.smester == 5 %}selected{% endif %}>5</option>
+                                            <option value="6" {% if Student.smester == 6 %}selected{% endif %}>6</option>
+                                            <option value="7" {% if Student.smester == 7 %}selected{% endif %}>7</option>
+                                            <option value="8" {% if Student.smester == 8 %}selected{% endif %}>8</option>
                                           </select>
                                         </div> 
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">Roll No</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" name="roll" type="text" value="{{student.roll_no}}">
+                                            <input class="form-control" name="roll" type="text" value="{{Student.roll_no}}">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">CGPA</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" name="cgpa" type="number" step="0.01"  value="{{student.cgpa}}">
+                                            <input class="form-control" name="cgpa" type="number" step="0.01"  value="{{GPA.gpa}}">
                                         </div>
                                     </div>
                                    
@@ -262,23 +357,7 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label form-control-label">CNIC</label>
                                         <div class="col-lg-9">
-                                            <input class="form-control" name="cnic" type="text" value="{{student.cnic}}" placeholder="CNIC without dashes">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-lg-3 col-form-label form-control-label">Contact Info</label>
-                                        <div class="col-lg-5">
-                                            <input class="form-control" name="contact" type="number" value="{{student.contact}}" placeholder="Contact">
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <input class="form-control" name="whatsapp" type="number" value="{{student.whatsApp}}" placeholder="What's app">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-lg-3 col-form-label form-control-label">About</label>
-                                        <div class="col-lg-9">
-                                            <!-- <input class="form-control" type="text" value="jhonsanmark"> -->
-                                            <textarea class="form-control" name="about"  id="" cols="30" rows="2">{{student.about}}</textarea>
+                                            <input class="form-control" name="cnic" type="text" value="{{Student.cnic}}" placeholder="CNIC without dashes">
                                         </div>
                                     </div>
                                     <div class="form-group row mb-5 mt-1">
@@ -290,7 +369,7 @@
                                 </form>
                                     <hr>
                                     
-                                    <form  method="post">
+                                    <form  method="post" action="{% url 'resetPassord' %}">
                                         {% csrf_token %}
                                     <div class="form-group row ">
                                         <label class="col-lg-3 col-form-label form-control-label">Old Password</label>
