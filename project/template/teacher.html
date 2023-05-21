@@ -24,6 +24,31 @@
     .custom-text {
            font-family: 'Merriweather', serif;;
         }
+
+    .custom-text111{
+            font-family: 'Merriweather', serif;
+            font-size: 25px;
+            font-weight: bold;
+         }
+     .custom-text11{
+            font-family: 'Merriweather', serif;
+            font-size: 40px;
+            font-weight: bold;
+         }
+    .space{
+            margin-inline-end: 5px;
+        }
+    .space-btn{
+            margin-inline-end: 1px;
+        } 
+    .container {
+        position: relative;
+        top: 47px; /* Adjust this value to move the container down */
+    }
+    .custom-bg {
+            background-color: #5E8ED6;
+        }
+    
 </style>
 
 <body>
@@ -33,7 +58,7 @@
             <div class="col-lg-4">
                 <div class="profile-card-4 z-depth-3">
                     <div class="card">
-                        <div class="card-body text-center bg-primary rounded-top">
+                        <div class="card-body text-center custom-bg rounded-top">
                             <div class="user-box ">
                                 <img src="{{Teacher.img.url}}" alt="user avatar">
                             </div>
@@ -78,41 +103,47 @@
                         <div class="tab-content p-3">
                             <div class="tab-pane active show" id="profile">
                                 <h2 class="mb-3 custom-text"> <small> </small> {{Teacher.designation}}</h2>
-                                <h3 class="mb-3 custom-text justify-content-center"> <small>Subject</small> <u> {{Teacher.subject}}</u></h3>
-
+                                <div class="mb-3 d-flex justify-content-center">
+                                    <h3 class="custom-text11">
+                                        <small>Subject</small>
+                                        <u>{{ Teacher.subject }}</u>
+                                    </h3>
+                                </div>
+                                
                                 <div class="row">
                                    
                                     <div class="col-md-8">
                                         <hr>
-                                        <form action="{% url 'teacher' %}" method="POST" id="Check-attendence">
+                                        <form action="{% url 'teacher' %}" method="POST" id="Check-attendance">
                                             {% csrf_token %}
-                                        <h5 class="mt-2 mb-3">Mark Attendence </h5>
-                                        <div class="d-inline-block">
-                                            <select class="form-select mb-3 mr-2 border-1 smester1" name="smester" aria-label="Default select example">
-                                                <option selected>Smester</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                            </select>
-                                        </div>
-                                        <div class="d-inline-block">
-                                            <select class="form-select mb-3  border-1" name="subject" aria-label="Default select example">
-                                                <option selected>Subject</option>
-                                                {% for subject in Subjects %}
-                                                    <option value="{{subject.id}}">{{subject.name}}</option>
+                                            <h5 class="mt-2 mb-3 custom-text111">Mark Attendance</h5>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <select class="form-select border-1 semester1 space" name="semester" aria-label="Default select example" style="margin-right: 5px;">
+                                                    <option selected>Semester</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                </select>
+                                                <select class="form-select border-1 space" name="subject" aria-label="Default select example" style="margin-right: 5px;">
+                                                    <option selected>Subject</option>
+                                                    {% for subject in Subjects %}
+                                                    <option value="{{ subject.id }}">{{ subject.name }}</option>
                                                     {% endfor %}
-
-                                            </select>
-                                            <input type="number" placeholder="Enter lacture number" name="lacture" class="form-control">
-                                            <button type="submit" class="btn btn-info">Submit</button>
-                                        </div>
-                                    </form>
+                                                </select>
+                                                <input type="number" placeholder="Enter lecture number" name="lecture" class="form-control" style="width: 100%; margin-right: 10px;">
+                                                <button type="submit" class="btn btn-info" style="width: 100%; margin-right: 10px;">Submit</button>
+                                            </div>
+                                        </form>
                                     </div>
+                                    
+                                    
+                                    
+                                    
                                     <!-- <div class="col-md-1"></div> -->
                                     <div class="col-md-12">
                                         <div style="border: 1px solid grey; border-radius: 10px; padding: 7px;">
