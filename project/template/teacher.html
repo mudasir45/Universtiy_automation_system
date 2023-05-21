@@ -26,10 +26,10 @@
                     <div class="card">
                         <div class="card-body text-center bg-primary rounded-top">
                             <div class="user-box ">
-                                <img src="{{Student.img.url}}" alt="user avatar">
+                                <img src="{{Teacher.img.url}}" alt="user avatar">
                             </div>
-                            <span class="badge badge-success"><i class="fas fa-user-graduate"></i> Student Portal</span>
-                            <h5 class="mb-1 text-white">{{Student.user.first_name}} {{Student.user.last_name}}</h5>
+                            <span class="badge badge-success"><i class="fas fa-user-graduate"></i> Teacher Portal</span>
+                            <h5 class="mb-1 text-white">{{Teacher.user.first_name}} {{Teacher.user.last_name}}</h5>
                             <h6 class="text-light">{{Student.department}}</h6>
                             
                             <h3 class="text-light text-danger">University Of Okara</h3>
@@ -68,70 +68,8 @@
                         </ul>
                         <div class="tab-content p-3">
                             <div class="tab-pane active show" id="profile">
-                                <h2 class="mb-3"> <small> Current GPA = </small> {{GPA.gpa}}</h2>
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <!-- <h6>About</h6> -->
-                                        <!-- Example single danger button -->
-                                        <h5>Check Your Result</h5> <br>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Semester
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 1 %}">1</a></li>
-                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 2 %}">2</a></li>
-                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 3 %}">3</a></li>
-                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 4 %}">4</a></li>
-                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 5 %}">5</a></li>
-                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 6 %}">6</a></li>
-                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 7 %}">7</a></li>
-                                            <li><a class="dropdown-item" href="{% url 'checkMarks' 8 %}">8</a></li>
-                                            </ul>
-                                        </div>
-
-                                            <!-- <h2>{{student.user.first_name}} {{student.user.last_name}}</h2>
-                                             <p>{{student.department}} <br></p>
-                                             <strong>University of Okara</strong>
-                                             <hr> -->
-                                             
-                                        <!-- </p>
-                                        <h5>Area of Interest</h5>   
-                                        <p>
-                                            {{student.chapter.title}}
-                                        </p> -->
-                                    </div>
-                                    <div class="col-md-7">
-                                        <table class="table border">
-                                            <thead>
-                                              <tr>
-                                                <th scope="col">Subject</th>
-                                                <th scope="col">Instructor</th>
-                                                <th scope="col">Marks</th>
-                                                <th scope="col">GPA</th>
-                                              </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for mark in Marks %}
-                                              <tr>
-                                                <th scope="row">{{mark.subject.name}}</th>
-                                                <td>
-                                                    {% for teacher in Teachers %} 
-                                                        {% if teacher.subject == mark.subject %}
-                                                           {{teacher}}
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </td>
-
-                                                <td>{{mark.marks}}</td>
-                                                <td>{{mark.gpa}}</td>
-                                              </tr>
-                                              {% endfor %}
-                                            </tbody>
-                                          </table>
-                                    </div>
-                                    
-                                </div>
+                                <h2 class="mb-3"> <small> </small> {{Teacher.designation}}</h2>
+                                <h3 class="mb-3"> <small>Subject</small> <u> {{Teacher.subject}}</u></h3>
 
                                 <div class="row">
                                    
@@ -139,7 +77,7 @@
                                         <hr>
                                         <form action="CheckAttendence" id="Check-attendence">
                                             {% csrf_token %}
-                                        <h5 class="mt-2 mb-3">Check Attendence </h5>
+                                        <h5 class="mt-2 mb-3">Mark Attendence </h5>
                                         <div class="d-inline-block">
                                             <select class="form-select mb-3 mr-2 border-1 smester1" name="smester" aria-label="Default select example">
                                                 <option selected>Smester</option>
@@ -161,6 +99,7 @@
                                                     {% endfor %}
 
                                             </select>
+                                            <input type="number" name="std_id" class="form-control">
                                             <input type="hidden" name="std_id" value="{{Student.id}}">
                                             <button type="submit" class="btn btn-info">Submit</button>
                                         </div>
@@ -173,13 +112,43 @@
                                                 <thead>
                                                     <tr>
                                                         <th scope="col">Lacture</th>
-                                                        <th scope="col">Date</th>
                                                         <th scope="col">Subject</th>
+                                                        <th scope="col">Student name</th>
                                                         <th scope="col">Status</th>
+                                                        <th scope="col">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="attendance-details">
-                                                   
+                                                    
+                                                    <tr>
+                                                        <th scope="row"></th>
+                                                        <td>{{Mark}}</td>
+                                                        <td>Otto</td>
+                                                        <td>@mdo</td>
+                                                        <td>
+                                                        <button type="button" onclick="MarkPresent(id)" class="btn btn-outline-primary">P</button>
+                                                        <button type="button" onclick="MarkAbsent(id)" class="btn btn-outline-danger">A</button>
+                                                        </td>
+                                                      </tr>
+                                                        <th scope="row">1</th>
+                                                        <td>Mark</td>
+                                                        <td>Otto</td>
+                                                        <td>@mdo</td>
+                                                        <td>
+                                                        <button type="button" class="btn btn-primary">P</button>
+                                                        <button type="button" class="btn btn-danger">A</button>
+                                                        </td>
+                                                      </tr>
+                                                        <th scope="row">1</th>
+                                                        <td>Mark</td>
+                                                        <td>Otto</td>
+                                                        <td>@mdo</td>
+                                                        <td>
+                                                        <button type="button" class="btn btn-primary">P</button>
+                                                        <button type="button" class="btn btn-danger">A</button>
+                                                        </td>
+                                                      </tr>
+                                                      
                                                 </tbody>
                                             </table>
                                             
@@ -189,77 +158,6 @@
 
                             </div>
                            
-                    
-
-                        <script>
-                            $(document).ready(function() {
-                            $('#Check-attendence').on('submit', function(event) {
-                                event.preventDefault();  // Prevent form submission
-
-                                // Get the CSRF token value from the cookie
-                                var csrfToken = getCookie('csrftoken');
-
-                                // Get the form data
-                                var formData = $(this).serialize();
-
-                                // Append the CSRF token to the form data
-                                formData += '&csrfmiddlewaretoken=' + csrfToken;
-                                
-
-                                // Make the AJAX request
-                                $.ajax({
-                                    type: 'POST',
-                                    url: '/CheckAttendence/',
-                                    data: formData,
-                                    success: function(response) {
-                                        // Update the attendance details in the table
-                                        var tableBody = document.getElementById('attendance-details');
-                                        tableBody.innerHTML = ''; // Clear existing table rows
-
-                                        response.attendance.forEach(function(item, index) {
-                                        var newRow = document.createElement('tr');
-                                        var statusText = item.status ? 'Present' : 'Absent'; // Check status and set the corresponding text
-                                        newRow.innerHTML = '<th scope="row">' + item.lacture + '</th>' +
-                                            '<td>' + item.date + '</td>' +
-                                            '<td>' + item.subject + '</td>' +
-                                            '<td>' + statusText + '</td>';
-                                        tableBody.appendChild(newRow);
-
-                                            });
-                                        },
-                                        error: function(xhr) {
-                                            // Handle error
-                                            console.log(xhr.responseText);
-                                        }
-                                    });
-                            });
-
-                            // Function to get the CSRF token value from the cookie
-                            function getCookie(name) {
-                                var cookieValue = null;
-                                if (document.cookie && document.cookie !== '') {
-                                    var cookies = document.cookie.split(';');
-                                    for (var i = 0; i < cookies.length; i++) {
-                                        var cookie = cookies[i].trim();
-                                        // Check if the cookie name matches the csrfmiddlewaretoken format
-                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                            break;
-                                        }
-                                    }
-                                }
-                                return cookieValue;
-                            }
-
-                            
-});
-
-                        </script>
-                        
-                            
-                            
-
-
                             <div class="tab-pane" id="messages">
                                 {% for pending_connection_user in pending_connection_users %}
                                 <div class="alert alert-info alert-dismissible" role="alert">

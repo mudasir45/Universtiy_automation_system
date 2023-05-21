@@ -37,7 +37,7 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
+            return redirect('teacher')
     return render(request, 'login.html')
 
 def checkMarks(request, smester):
@@ -138,11 +138,26 @@ def resetPassord(request):
 
 
 def teacher(request):
+
     curr_user = request.user
     Teacher = teachers.objects.get(user = curr_user)
-    Students = student.objects.all()
+    if request.method == "POST":
+        subject = request.POST.get('subject')
+        smester = request.POST.get('smester')
+        lacture = request.POST.get('lacture')
+        Attendence
     context = {
         'Teacher': Teacher,
-        'Students': Students,
     }
     return render(request, 'teacher.html', context)
+
+def teacherAttendence(request):
+    if request.method == "POST":
+        std_id = request.POST.get('std_id')
+        lable = request.POST.get('lable')
+        subject = request.POST.get('subject')
+        smester = request.POST.get('smester')
+        lacture = request.POST.get('lacture')
+        
+        Student = student.objects.get(id = std_id)
+
