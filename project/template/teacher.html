@@ -75,7 +75,7 @@
                                    
                                     <div class="col-md-8">
                                         <hr>
-                                        <form action="CheckAttendence" id="Check-attendence">
+                                        <form action="{% url 'teacher' %}" method="POST" id="Check-attendence">
                                             {% csrf_token %}
                                         <h5 class="mt-2 mb-3">Mark Attendence </h5>
                                         <div class="d-inline-block">
@@ -99,8 +99,7 @@
                                                     {% endfor %}
 
                                             </select>
-                                            <input type="number" name="std_id" class="form-control">
-                                            <input type="hidden" name="std_id" value="{{Student.id}}">
+                                            <input type="number" placeholder="Enter lacture number" name="lacture" class="form-control">
                                             <button type="submit" class="btn btn-info">Submit</button>
                                         </div>
                                     </form>
@@ -119,35 +118,23 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="attendance-details">
-                                                    
+                                                    {% for attendence in Attendence_details %}
                                                     <tr>
-                                                        <th scope="row"></th>
-                                                        <td>{{Mark}}</td>
-                                                        <td>Otto</td>
-                                                        <td>@mdo</td>
+                                                        <th scope="row">{{attendence.lacture}}</th>
+                                                        <td>{{attendence.subject.name}}</td>
+                                                        <td>{{attendence.student.user.first_name}}</td>
+                                                        <td>{{attendence.status}}</td>
+                                                        <!-- <td></td> -->
                                                         <td>
-                                                        <button type="button" onclick="MarkPresent(id)" class="btn btn-outline-primary">P</button>
-                                                        <button type="button" onclick="MarkAbsent(id)" class="btn btn-outline-danger">A</button>
+                                                            <button type="button" 
+                                                            onclick="MarkPresent({{attendence.student.id}},{{attendence.lacture}}, {{attendence.subject.id}}, {{attendence.smester}} )" 
+                                                            class="btn btn-outline-primary">P</button>
+                                                            <button type="button" 
+                                                            onclick="MarkAbsent({{attendence.student.id}},{{attendence.lacture}}, {{attendence.subject.id}}, {{attendence.smester}})" 
+                                                            class="btn btn-outline-danger">A</button>
                                                         </td>
                                                       </tr>
-                                                        <th scope="row">1</th>
-                                                        <td>Mark</td>
-                                                        <td>Otto</td>
-                                                        <td>@mdo</td>
-                                                        <td>
-                                                        <button type="button" class="btn btn-primary">P</button>
-                                                        <button type="button" class="btn btn-danger">A</button>
-                                                        </td>
-                                                      </tr>
-                                                        <th scope="row">1</th>
-                                                        <td>Mark</td>
-                                                        <td>Otto</td>
-                                                        <td>@mdo</td>
-                                                        <td>
-                                                        <button type="button" class="btn btn-primary">P</button>
-                                                        <button type="button" class="btn btn-danger">A</button>
-                                                        </td>
-                                                      </tr>
+                                                      {% endfor %}
                                                       
                                                 </tbody>
                                             </table>
@@ -157,7 +144,35 @@
                                 </div>
 
                             </div>
-                           
+                           <script>
+                                    function MarkPresent(std_id, lacture, sub_id, smester){
+                                        console.log('ID', std_id)
+                                        console.log('Lacture', lacture)
+                                        console.log('sub id', sub_id)
+                                        console.log('smester', smester)
+                                        $.ajax({
+                                            type: "POST",
+                                            url: '/markAttendence/',
+                                            data: {
+                                                'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                                                'std_id':std_id,
+                                                'lable':'p',
+                                                'lacture':lacture,
+                                                'sub_id':sub_id,
+
+                                            },
+                                            success: function (data) {
+                                                console.log(data)
+                                            }
+                                        })
+                                    }
+
+                                    function MarkAbsent(id){
+                                        console.log("Absent function called", id)
+                                    }
+                            
+                           </script>
+
                             <div class="tab-pane" id="messages">
                                 {% for pending_connection_user in pending_connection_users %}
                                 <div class="alert alert-info alert-dismissible" role="alert">

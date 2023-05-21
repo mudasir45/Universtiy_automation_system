@@ -141,23 +141,45 @@ def teacher(request):
 
     curr_user = request.user
     Teacher = teachers.objects.get(user = curr_user)
+    Subjects = subject.objects.all()
     if request.method == "POST":
-        subject = request.POST.get('subject')
+        Subject = request.POST.get('subject')
         smester = request.POST.get('smester')
         lacture = request.POST.get('lacture')
-        Attendence
+        Attendence_details = attendence.objects.filter(subject = Subject, smester = smester, lacture = lacture)
+        print("Attendence detilas: ", Attendence_details)
+        context = {
+            'Attendence_details':Attendence_details,
+            'Teacher': Teacher,
+            'Subjects': Subjects,
+        }
+        return render(request, 'teacher.html', context)
+
     context = {
         'Teacher': Teacher,
+        'Subjects': Subjects,
     }
     return render(request, 'teacher.html', context)
 
-def teacherAttendence(request):
+def markAttendence(request):
     if request.method == "POST":
         std_id = request.POST.get('std_id')
         lable = request.POST.get('lable')
-        subject = request.POST.get('subject')
+        sub_id = request.POST.get('sub_id')
         smester = request.POST.get('smester')
         lacture = request.POST.get('lacture')
         
         Student = student.objects.get(id = std_id)
+        Subject = subject.objects.get(id = sub_id)
+        attendence, created = attendence.objects.get_or_create(student = Student, subject = Subject, smester = smester, lacture = lacture)
+        if lable == 'p':
+            attendence.status = True
+        elif lable == 'A':
+            attendence.status = False
+        attendence.save()
+        data = {
+            'message':'Done'
+        }
+        return JsonResponse(data)
+
 
