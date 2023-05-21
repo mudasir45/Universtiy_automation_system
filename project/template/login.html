@@ -81,6 +81,8 @@
 					<form method="post">
 						{% csrf_token %}
 						<div id="dynamic_container">
+							
+							
 							<div class="input-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text br-15"><i class="fas fa-user-graduate"></i></span>
@@ -92,6 +94,14 @@
 									<span class="input-group-text br-15"><i class="fas fa-lock"></i></span>
 								</div>
 								<input type="password" name="pass" placeholder="Student Email" class="form-control" />
+							</div>
+							<div class="input-group">
+								<select class="form-select mt-4" name="lable" aria-label="Default select example">
+									<option selected>select</option>
+									<option value="Student">Student</option>
+									<option value="Teacher">Teacher</option>
+									<option value="HOD">HOD</option>
+								  </select>
 							</div>
 						</div>
 					</div>

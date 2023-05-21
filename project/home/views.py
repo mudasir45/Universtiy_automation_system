@@ -36,10 +36,16 @@ def user_login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['pass']
+        lable = request.POST['lable']
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('teacher')
+            if lable == 'Student':
+                return redirect('home')
+            elif lable == 'Teacher':
+                return redirect('teacher')
+            else:
+                return redirect('teacher')
     return render(request, 'login.html')
 
 def checkMarks(request, smester):
@@ -213,5 +219,31 @@ def accept_Reject_Applications(request):
         return JsonResponse(data)
     return HttpResponse("done")
         
+def submit_application(request):
+    if request.method == "POST":
+        std_id = request.POST.get('std_id')
+        tcher_id = request.POST.get('tcher_id')
+        lable = request.POST.get('lable')
+        title = request.POST.get('title')
+        message = request.POST.get('message')
+        Student = student.objects.get(id = std_id)
+        if lable == 'teacher':
+            Teacher = teachers.objects.get(id = tcher_id)
+            application_request.objects.create(
+            student = Student,
+            teacher = Teacher,
+            title = title,
+            message = message
+        )
+        else:
+            Teacher = HOD.objects.get(id = tcher_id)
+            application_request.objects.create(
+            student = Student,
+            teacher = Teacher,
+            title = title,
+            message = message
+            )
+       
 
 
+        
