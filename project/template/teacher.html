@@ -4,7 +4,7 @@
 <head>
     {% load static %}
     <meta charset="utf-8">
-    <title>bs4 profile with messages and edit - Bootdey.com</title>
+    <title>Teachers Portal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="{% static 'UserProfile.css' %}">
@@ -16,6 +16,15 @@
     <!-- jquery CDN link  -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<style>
+    .social-icons a {
+            margin-right: 10px;
+        }
+
+    .custom-text {
+           font-family: 'Merriweather', serif;;
+        }
+</style>
 
 <body>
     <div class="container">
@@ -28,16 +37,16 @@
                             <div class="user-box ">
                                 <img src="{{Teacher.img.url}}" alt="user avatar">
                             </div>
-                            <span class="badge badge-success"><i class="fas fa-user-graduate"></i> Teacher Portal</span>
-                            <h5 class="mb-1 text-white">{{Teacher.user.first_name}} {{Teacher.user.last_name}}</h5>
+                            <span class="badge badge-success custom-text"><i class="fas fa-user-graduate"></i> Teacher Portal</span>
+                            <h5 class="mb-1 text-white custom-text">{{Teacher.user.first_name}} {{Teacher.user.last_name}}</h5>
                             <h6 class="text-light">{{Student.department}}</h6>
                             
-                            <h3 class="text-light text-danger">University Of Okara</h3>
+                            <h3 class="text-light text-danger custom-text">University Of Okara</h3>
                                 <!-- <button class="btn btn-danger">Appriciate</button>
                                 <button class="btn btn-success">Message</button> -->
                         </div>
                         
-                        <div class="card-footer text-center">
+                        <div class="card-footer text-center social-icons">
                                 <a href=""><i class="mr-2 fa-brands fa-facebook"></i></a>
                                 <a href=""><i class="mr-2 fa-brands fa-github"></i></i></a>
                                 <a href=""><i class="mr-2 fa-brands fa-google"></i></a>
@@ -54,22 +63,22 @@
                             <li class="nav-item">
                                 <a href="javascript:void();" data-target="#profile" data-toggle="pill"
                                     class="nav-link active show"><i class="icon-user"></i> <span
-                                        class="hidden-xs">Profile</span></a>
+                                        class="hidden-xs custom-text">Profile</span></a>
                             </li>
                             <li class="nav-item">
                                 <a href="javascript:void();" data-target="#messages" data-toggle="pill"
                                     class="nav-link"><i class="icon-envelope-open"></i> <span
-                                        class="hidden-xs">Messages</span></a>
+                                        class="hidden-xs custom-text">Messages</span></a>
                             </li>
                             <li class="nav-item">
                                 <a href="javascript:void();" data-target="#edit" data-toggle="pill" class="nav-link"><i
-                                        class="icon-note"></i> <span class="hidden-xs">Edit</span></a>
+                                        class="icon-note"></i> <span class="hidden-xs custom-text">Edit</span></a>
                             </li>
                         </ul>
                         <div class="tab-content p-3">
                             <div class="tab-pane active show" id="profile">
-                                <h2 class="mb-3"> <small> </small> {{Teacher.designation}}</h2>
-                                <h3 class="mb-3"> <small>Subject</small> <u> {{Teacher.subject}}</u></h3>
+                                <h2 class="mb-3 custom-text"> <small> </small> {{Teacher.designation}}</h2>
+                                <h3 class="mb-3 custom-text justify-content-center"> <small>Subject</small> <u> {{Teacher.subject}}</u></h3>
 
                                 <div class="row">
                                    
