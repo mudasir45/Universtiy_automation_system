@@ -16,6 +16,9 @@ from .models import application_request
 from .models import pending_applications
 
 # Create your views here.
+def goToLogin(request):
+    return redirect('user_login')
+
 @login_required
 def home(request):
     curr_user = request.user
@@ -49,8 +52,10 @@ def user_login(request):
                 return redirect('home')
             elif lable == 'Teacher':
                 return redirect('teacher')
-            else:
+            elif lable == 'HOD':
                 return redirect('hod')
+            else:
+                return render(request, 'login.html')
     return render(request, 'login.html')
 
 def checkMarks(request, smester):
@@ -153,16 +158,17 @@ def resetPassord(request):
 
 @login_required
 def teacher(request):
-
     curr_user = request.user
     Teacher = teachers.objects.get(user = curr_user)
     Subjects = subject.objects.all()
     Applications = pending_applications.objects.filter(application__teacher=Teacher)
     if request.method == "POST":
-        Subject = request.POST.get('subject')
+        Subject = request.POST.get('sub')
         smester = request.POST.get('smester')
         lacture = request.POST.get('lacture')
-        Attendence_details = attendence.objects.filter(subject = Subject, smester = smester, lacture = lacture)
+        # print(Subject)
+        
+        Attendence_details = attendence.objects.all()
         print("Attendence detilas: ", Attendence_details)
         context = {
             'Attendence_details':Attendence_details,
@@ -271,5 +277,34 @@ def allocate_subject(request):
         Teacher = teachers.objects.get(id = thr_id)
         Teacher.subject = Subject
         Teacher.save()
+        return redirect('hod')
+    
+def add_teacher(request):
+    if request.method == "POST":
+        user_id = request.POST.get('user_id')
+        user = User.objects.get(id = user_id)
+        Teacher = teachers.objects.create(
+            user = user
+        )
+        Teacher.save()
+        return redirect('hod')
+    
+def add_student(request):
+    if request.method == "POST":
+        user_id = request.POST.get('user_id')
+        user = User.objects.get(id = user_id)
+        Student, get = student.objects.get_or_create(
+            user = user
+        )
+        Student.save()
+        return redirect('hod')
+
+def add_subject(request):
+    if request.method == "POST":
+        sub_name = request.POST.get('sub_name')
+        Subject, get = subject.objects.get_or_create(
+            name = sub_name
+        )
+        Subject.save()
         return redirect('hod')
         
