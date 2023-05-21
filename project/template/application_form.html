@@ -74,43 +74,33 @@ h4 {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="post" action="">
+      <form method="post" action="{% url 'submit_application' %}">
         {% csrf_token %}
         <div class="modal-body">
           <div class="form-group">
-            <label for="pLanguage">Prgramming Language*</label>
-            <select class="form-select form-control" name="pLanguage" aria-label="Default select example">
-              <option selected>Select programming language</option>
-              <option value="C/C++">C/C++</option>
-              <option value="Python">Python</option>
-              <option value="Java">Java</option>
-              <option value="Java Script">Java Script</option>
-              <option value="C#">C#</option>
-              <option value="PHP">PHP</option>
-            </select>
-          </div>
-          <input type="hidden" name="studentID" value="{{student.id}}">
-          <div class="form-group">
-            <label for="expLevel">Experience Level*</label>
-            <select class="form-select form-control" name="expLevel" id="expLevel" aria-label="Default select example">
-              <option selected>Open this select menu</option>
-              <option value="Beginner">Beginner</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Expert">Expert</option>
+            <label for="teacher_id">Teacher*</label>
+            <select class="form-select form-control" name="teacher_id" aria-label="Default select example">
+              <option selected>Select the Teacher</option>
+              {% for teacher in Teachers %}
+              <option value="{{teacher.id}}">{{teacher.user.first_name}} {{teacher.user.last_name}}</option>
+              {% endfor %}
             </select>
           </div>
           <div class="form-group">
-            <label for="password1">Tell us about your experience*</label>
-            <textarea class="form-control" name="aboutWrkExp"  id="" cols="30" rows="3">
+            <label for="std_id">Title*</label>
+            <input type="text" class="form-control" name="title" >
+
+          </div>
+          <input type="hidden" name="std_id" value="{{Student.id}}">
+         
+          <div class="form-group">
+            <label for="password1">Message</label>
+            <textarea class="form-control" name="message"  id="" cols="30" rows="3">
             
             </textarea>
           </div>
-          <div class="form-group">
-            <label for="password1">Portfolio project</label>
-            <input class="form-control" name="profileImg" type="file">
-          </div>
+    
         </div>
-        <input type="hidden" name="std" value="{{student}}">
         <div class="modal-footer border-top-0 d-flex justify-content-center">
           <button type="submit" class="btn btn-success">Submit</button>
         </div>

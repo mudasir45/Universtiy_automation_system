@@ -23,12 +23,16 @@ def home(request):
     # Marks = marks.objects.filter(student = Student)
     GPA = gpa.objects.filter(student = Student).first()
     Subjects = subject.objects.all()
+    Teachers = teachers.objects.all()
+    Pending_application = pending_applications.objects.filter(application__student = Student)
     context = {
         'Student': Student,
         'Attendance': Attendance,
         # 'Marks': Marks,
         'GPA':GPA, 
-        'Subjects':Subjects
+        'Subjects':Subjects,
+        'Teachers':Teachers,
+        'Pending_applications':Pending_application,
     }
     return render(request, 'student.html', context)
 
@@ -45,7 +49,7 @@ def user_login(request):
             elif lable == 'Teacher':
                 return redirect('teacher')
             else:
-                return redirect('teacher')
+                return redirect('hod')
     return render(request, 'login.html')
 
 def checkMarks(request, smester):
@@ -56,6 +60,7 @@ def checkMarks(request, smester):
     GPA = gpa.objects.filter(student = Student).first()
     Teacher = teachers.objects.all()
     Subjects = subject.objects.all()
+    Pending_applications = pending_applications.objects.filter(application__student = Student)
     
     Marks = marks.objects.filter(smester = smester)
     context = {
@@ -66,6 +71,8 @@ def checkMarks(request, smester):
         'Marks':Marks,
         'Teachers':Teacher,
         'Subjects':Subjects,
+        'Subjects':Subjects,
+        'Pending_applications':Pending_applications,
     }
     return render(request, 'student.html', context)
 
@@ -77,7 +84,6 @@ def CheckAttendence(request):
         smester = request.POST.get('smester')
         Student = student.objects.get(id = std_id)
         Attendance = attendence.objects.filter(student = Student, smester = smester, subject = subject)
-        
         attendance_data = []
         print(Student)
         print(smester)
@@ -222,30 +228,35 @@ def accept_Reject_Applications(request):
 def submit_application(request):
     if request.method == "POST":
         std_id = request.POST.get('std_id')
-        tcher_id = request.POST.get('tcher_id')
-        lable = request.POST.get('lable')
+        tcher_id = request.POST.get('teacher_id')
         title = request.POST.get('title')
-        messag = request.POST.get('message')
+        disc = request.POST.get('message')
         Student = student.objects.get(id = std_id)
-        if lable == 'teacher':
-            Teacher = teachers.objects.get(id = tcher_id)
-            application_request.objects.create(
-            student = Student,
-            teacher = Teacher,
-            title = title,
-            message = messag
+        Teacher = teachers.objects.get(id = tcher_id)
+        Application = application_request.objects.create(
+        student = Student,
+        teacher = Teacher,
+        title = title,
+        message = disc,
         )
-        else:
-            Teacher = HOD.objects.get(id = tcher_id)
-            application_request.objects.create(
-            student = Student,
-            HOD = Teacher,
-            title = title,
-            message = messag
-            )
-            # message.success
-            return redirect('home')
-       
+        Application.save()
+        pending_app = pending_applications.objects.create(application = Application)
+        pending_app.save()
 
+        return redirect('home')
+       
+def hod(request):
+    curr_user = request.user
+    Teacher = teachers.objects.all()
+    Subjects = subject.objects.all()
+    Students = student.objects.all()
+    hod = HOD.objects.get(user = curr_user)
+    context = {
+        'Teacher': Teacher,
+        'Subjects': Subjects,
+        'Students': Students,
+        'hod': hod,
+    }
+    return render(request, 'hod.html', context)
 
         
