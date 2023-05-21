@@ -15,4 +15,5 @@ urlpatterns = [
     path('submit_application/', views.submit_application, name='submit_application'),
     
     path('hod/', views.hod, name='hod'),
+    path('allocate_subject/', views.allocate_subject, name='allocate_subject'),
 ]

@@ -4,6 +4,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 
+from django.contrib.auth.models import User
 from .models import student
 from .models import attendence
 from .models import HOD
@@ -150,7 +151,7 @@ def resetPassord(request):
     messages.error(request, 'Invalid request method!')
     return redirect('home')
 
-
+@login_required
 def teacher(request):
 
     curr_user = request.user
@@ -244,19 +245,31 @@ def submit_application(request):
         pending_app.save()
 
         return redirect('home')
-       
+
+@login_required   
 def hod(request):
     curr_user = request.user
-    Teacher = teachers.objects.all()
+    Teachers = teachers.objects.all()
     Subjects = subject.objects.all()
     Students = student.objects.all()
+    Users = User.objects.all()
     hod = HOD.objects.get(user = curr_user)
     context = {
-        'Teacher': Teacher,
+        'Teachers': Teachers,
         'Subjects': Subjects,
         'Students': Students,
         'hod': hod,
+        'Users': Users,
     }
     return render(request, 'hod.html', context)
 
+def allocate_subject(request):
+    if request.method == "POST":
+        thr_id = request.POST.get('thr_id')
+        sub_id = request.POST.get('sub_id')
+        Subject = subject.objects.get(id = sub_id)
+        Teacher = teachers.objects.get(id = thr_id)
+        Teacher.subject = Subject
+        Teacher.save()
+        return redirect('hod')
         
