@@ -4,7 +4,7 @@
 <head>
     {% load static %}
     <meta charset="utf-8">
-    <title>bs4 profile with messages and edit - Bootdey.com</title>
+    <title>Teachers Portal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="{% static 'UserProfile.css' %}">
@@ -16,6 +16,40 @@
     <!-- jquery CDN link  -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<style>
+    .social-icons a {
+            margin-right: 10px;
+        }
+
+    .custom-text {
+           font-family: 'Merriweather', serif;;
+        }
+
+    .custom-text111{
+            font-family: 'Merriweather', serif;
+            font-size: 25px;
+            font-weight: bold;
+         }
+     .custom-text11{
+            font-family: 'Merriweather', serif;
+            font-size: 40px;
+            font-weight: bold;
+         }
+    .space{
+            margin-inline-end: 5px;
+        }
+    .space-btn{
+            margin-inline-end: 1px;
+        } 
+    .container {
+        position: relative;
+        top: 47px; /* Adjust this value to move the container down */
+    }
+    .custom-bg {
+            background-color: #5E8ED6;
+        }
+    
+</style>
 
 <body>
     <div class="container">
@@ -24,20 +58,20 @@
             <div class="col-lg-4">
                 <div class="profile-card-4 z-depth-3">
                     <div class="card">
-                        <div class="card-body text-center bg-primary rounded-top">
+                        <div class="card-body text-center custom-bg rounded-top">
                             <div class="user-box ">
                                 <img src="{{Teacher.img.url}}" alt="user avatar">
                             </div>
-                            <span class="badge badge-success"><i class="fas fa-user-graduate"></i> Teacher Portal</span>
-                            <h5 class="mb-1 text-white">{{Teacher.user.first_name}} {{Teacher.user.last_name}}</h5>
+                            <span class="badge badge-success custom-text"><i class="fas fa-user-graduate"></i> Teacher Portal</span>
+                            <h5 class="mb-1 text-white custom-text">{{Teacher.user.first_name}} {{Teacher.user.last_name}}</h5>
                             <h6 class="text-light">{{Student.department}}</h6>
                             
-                            <h3 class="text-light text-danger">University Of Okara</h3>
+                            <h3 class="text-light text-danger custom-text">University Of Okara</h3>
                                 <!-- <button class="btn btn-danger">Appriciate</button>
                                 <button class="btn btn-success">Message</button> -->
                         </div>
                         
-                        <div class="card-footer text-center">
+                        <div class="card-footer text-center social-icons">
                                 <a href=""><i class="mr-2 fa-brands fa-facebook"></i></a>
                                 <a href=""><i class="mr-2 fa-brands fa-github"></i></i></a>
                                 <a href=""><i class="mr-2 fa-brands fa-google"></i></a>
@@ -54,56 +88,62 @@
                             <li class="nav-item">
                                 <a href="javascript:void();" data-target="#profile" data-toggle="pill"
                                     class="nav-link active show"><i class="icon-user"></i> <span
-                                        class="hidden-xs">Profile</span></a>
+                                        class="hidden-xs custom-text">Profile</span></a>
                             </li>
                             <li class="nav-item">
                                 <a href="javascript:void();" data-target="#messages" data-toggle="pill"
                                     class="nav-link"><i class="icon-envelope-open"></i> <span
-                                        class="hidden-xs">Messages</span></a>
+                                        class="hidden-xs custom-text">Messages</span></a>
                             </li>
                             <li class="nav-item">
                                 <a href="javascript:void();" data-target="#edit" data-toggle="pill" class="nav-link"><i
-                                        class="icon-note"></i> <span class="hidden-xs">Edit</span></a>
+                                        class="icon-note"></i> <span class="hidden-xs custom-text">Edit</span></a>
                             </li>
                         </ul>
                         <div class="tab-content p-3">
                             <div class="tab-pane active show" id="profile">
-                                <h2 class="mb-3"> <small> </small> {{Teacher.designation}}</h2>
-                                <h3 class="mb-3"> <small>Subject</small> <u> {{Teacher.subject}}</u></h3>
-
+                                <h2 class="mb-3 custom-text"> <small> </small> {{Teacher.designation}}</h2>
+                                <div class="mb-3 d-flex justify-content-center">
+                                    <h3 class="custom-text11">
+                                        <small>Subject</small>
+                                        <u>{{ Teacher.subject }}</u>
+                                    </h3>
+                                </div>
+                                
                                 <div class="row">
                                    
                                     <div class="col-md-8">
                                         <hr>
-                                        <form action="{% url 'teacher' %}" method="POST" id="Check-attendence">
+                                        <form action="{% url 'teacher' %}" method="POST" id="Check-attendance">
                                             {% csrf_token %}
-                                        <h5 class="mt-2 mb-3">Mark Attendence </h5>
-                                        <div class="d-inline-block">
-                                            <select class="form-select mb-3 mr-2 border-1 smester1" name="smester" aria-label="Default select example">
-                                                <option selected>Smester</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                            </select>
-                                        </div>
-                                        <div class="d-inline-block">
-                                            <select class="form-select mb-3  border-1" name="subject" aria-label="Default select example">
-                                                <option selected>Subject</option>
-                                                {% for subject in Subjects %}
-                                                    <option value="{{subject.id}}">{{subject.name}}</option>
+                                            <h5 class="mt-2 mb-3 custom-text111">Mark Attendance</h5>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <select class="form-select border-1 semester1 space" name="semester" aria-label="Default select example" style="margin-right: 5px;">
+                                                    <option selected>Semester</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                </select>
+                                                <select class="form-select border-1 space" name="subject" aria-label="Default select example" style="margin-right: 5px;">
+                                                    <option selected>Subject</option>
+                                                    {% for subject in Subjects %}
+                                                    <option value="{{ subject.id }}">{{ subject.name }}</option>
                                                     {% endfor %}
-
-                                            </select>
-                                            <input type="number" placeholder="Enter lacture number" name="lacture" class="form-control">
-                                            <button type="submit" class="btn btn-info">Submit</button>
-                                        </div>
-                                    </form>
+                                                </select>
+                                                <input type="number" placeholder="Enter lecture number" name="lecture" class="form-control" style="width: 100%; margin-right: 10px;">
+                                                <button type="submit" class="btn btn-info" style="width: 100%; margin-right: 10px;">Submit</button>
+                                            </div>
+                                        </form>
                                     </div>
+                                    
+                                    
+                                    
+                                    
                                     <!-- <div class="col-md-1"></div> -->
                                     <div class="col-md-12">
                                         <div style="border: 1px solid grey; border-radius: 10px; padding: 7px;">
