@@ -78,7 +78,7 @@ class teachers(models.Model):
     designation = models.CharField(max_length=50, null=True, blank=True)
     department = models.ManyToManyField('department', blank=True)
     subject = models.ForeignKey(subject, on_delete=models.CASCADE, null=True, blank=True)
-    img = models.ImageField(upload_to='student', null=True, blank=True)
+    img = models.ImageField(upload_to='teachers', null=True, blank=True)
     def __str__(self) -> str:
         return self.user.first_name
     
@@ -86,7 +86,7 @@ class HOD(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     designation = models.CharField(max_length=50, null=True, blank=True)
     department = models.ManyToManyField('department', blank=True)
-    img = models.ImageField(upload_to='student', null=True, blank=True)
+    img = models.ImageField(upload_to='HOD', null=True, blank=True)
     def __str__(self) -> str:
         return self.user.first_name
 
@@ -96,3 +96,21 @@ class gpa(models.Model):
     def __str__(self) -> str:
         return self.student.user.first_name
 
+class application_request(models.Model):
+    student = models.ForeignKey(student, on_delete=models.CASCADE, null=True, blank=True)
+    teacher = models.ForeignKey(teachers, on_delete=models.CASCADE, null=True, blank=True)
+    HOD = models.ForeignKey(HOD, on_delete=models.CASCADE, null=True, blank=True)
+    title = models.CharField(max_length=50, null=True, blank=True)
+    message = models.TextField(max_length=200, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now=True)
+    is_approved = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return f'{self.student} status = {self.is_approved}'
+
+class pending_applications(models.Model):
+    application = models.ForeignKey(application_request, on_delete=models.CASCADE, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self) -> str:
+        return f'{self.application.student.user.first_name} - {self.application.title}'

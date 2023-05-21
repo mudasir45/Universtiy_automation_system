@@ -11,6 +11,8 @@ from .models import marks
 from .models import gpa
 from .models import teachers
 from .models import subject
+from .models import application_request
+from .models import pending_applications
 
 # Create your views here.
 @login_required
@@ -37,7 +39,7 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
+            return redirect('teacher')
     return render(request, 'login.html')
 
 def checkMarks(request, smester):
@@ -138,11 +140,78 @@ def resetPassord(request):
 
 
 def teacher(request):
+
     curr_user = request.user
     Teacher = teachers.objects.get(user = curr_user)
-    Students = student.objects.all()
+    Subjects = subject.objects.all()
+    Applications = pending_applications.objects.filter(application__teacher=Teacher)
+    if request.method == "POST":
+        Subject = request.POST.get('subject')
+        smester = request.POST.get('smester')
+        lacture = request.POST.get('lacture')
+        Attendence_details = attendence.objects.filter(subject = Subject, smester = smester, lacture = lacture)
+        print("Attendence detilas: ", Attendence_details)
+        context = {
+            'Attendence_details':Attendence_details,
+            'Teacher': Teacher,
+            'Subjects': Subjects,
+            'Applications': Applications,
+        }
+        return render(request, 'teacher.html', context)
+
     context = {
         'Teacher': Teacher,
-        'Students': Students,
+        'Subjects': Subjects,
+        'Applications': Applications,
     }
     return render(request, 'teacher.html', context)
+
+def markAttendence(request):
+    if request.method == "POST":
+        std_id = request.POST.get('std_id')
+        lable = request.POST.get('lable')
+        sub_id = request.POST.get('sub_id')
+        smester = request.POST.get('smester')
+        lacture = request.POST.get('lacture')
+        
+        Student = student.objects.get(id = std_id)
+        Subject = subject.objects.get(id = sub_id)
+        print(Student)
+        print(Subject)
+        print(smester)
+        print(lacture)
+        Attendence, created = attendence.objects.get_or_create(student = Student, subject = Subject, smester = smester, lacture = lacture)
+        print('Attendence: ', Attendence)
+        if lable == 'P':
+            Attendence.status = True
+        elif lable == 'A':
+            Attendence.status = False
+        Attendence.save()
+        data = {
+            'message':'Done'
+        }
+        return JsonResponse(data)
+    return HttpResponse('mark attendence function called')
+
+def accept_Reject_Applications(request):
+    if request.method == "POST":
+        app_id = request.POST.get('app_id')
+        lable = request.POST.get('lable')
+        app = application_request.objects.get(id = app_id)
+        Application = pending_applications.objects.get(application = app)
+
+        if lable == 'A':
+            app.is_approved = True
+            app.save()
+            Application.delete()
+        else:
+            Application.delete()
+        
+        data = {
+            'message':'Done'
+        }
+        return JsonResponse(data)
+    return HttpResponse("done")
+        
+
+

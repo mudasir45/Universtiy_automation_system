@@ -10,4 +10,6 @@ urlpatterns = [
     path('resetPassord/', views.resetPassord, name='resetPassord'),
     
     path('teacher/', views.teacher, name='teacher'),
+    path('markAttendence/', views.markAttendence, name='markAttendence'),
+    path('accept_Reject_Applications/', views.accept_Reject_Applications, name='accept_Reject_Applications'),
 ]
