@@ -225,7 +225,7 @@ def submit_application(request):
         tcher_id = request.POST.get('tcher_id')
         lable = request.POST.get('lable')
         title = request.POST.get('title')
-        message = request.POST.get('message')
+        messag = request.POST.get('message')
         Student = student.objects.get(id = std_id)
         if lable == 'teacher':
             Teacher = teachers.objects.get(id = tcher_id)
@@ -233,16 +233,18 @@ def submit_application(request):
             student = Student,
             teacher = Teacher,
             title = title,
-            message = message
+            message = messag
         )
         else:
             Teacher = HOD.objects.get(id = tcher_id)
             application_request.objects.create(
             student = Student,
-            teacher = Teacher,
+            HOD = Teacher,
             title = title,
-            message = message
+            message = messag
             )
+            # message.success
+            return redirect('home')
        
 
 
