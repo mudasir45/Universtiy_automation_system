@@ -11,6 +11,8 @@ from .models import marks
 from .models import gpa
 from .models import teachers
 from .models import subject
+from .models import application_request
+from .models import pending_applications
 
 # Create your views here.
 @login_required
@@ -142,6 +144,7 @@ def teacher(request):
     curr_user = request.user
     Teacher = teachers.objects.get(user = curr_user)
     Subjects = subject.objects.all()
+    Applications = pending_applications.objects.filter(application__teacher=Teacher)
     if request.method == "POST":
         Subject = request.POST.get('subject')
         smester = request.POST.get('smester')
@@ -152,12 +155,14 @@ def teacher(request):
             'Attendence_details':Attendence_details,
             'Teacher': Teacher,
             'Subjects': Subjects,
+            'Applications': Applications,
         }
         return render(request, 'teacher.html', context)
 
     context = {
         'Teacher': Teacher,
         'Subjects': Subjects,
+        'Applications': Applications,
     }
     return render(request, 'teacher.html', context)
 
@@ -171,15 +176,42 @@ def markAttendence(request):
         
         Student = student.objects.get(id = std_id)
         Subject = subject.objects.get(id = sub_id)
-        attendence, created = attendence.objects.get_or_create(student = Student, subject = Subject, smester = smester, lacture = lacture)
-        if lable == 'p':
-            attendence.status = True
+        print(Student)
+        print(Subject)
+        print(smester)
+        print(lacture)
+        Attendence, created = attendence.objects.get_or_create(student = Student, subject = Subject, smester = smester, lacture = lacture)
+        print('Attendence: ', Attendence)
+        if lable == 'P':
+            Attendence.status = True
         elif lable == 'A':
-            attendence.status = False
-        attendence.save()
+            Attendence.status = False
+        Attendence.save()
         data = {
             'message':'Done'
         }
         return JsonResponse(data)
+    return HttpResponse('mark attendence function called')
+
+def accept_Reject_Applications(request):
+    if request.method == "POST":
+        app_id = request.POST.get('app_id')
+        lable = request.POST.get('lable')
+        app = application_request.objects.get(id = app_id)
+        Application = pending_applications.objects.get(application = app)
+
+        if lable == 'A':
+            app.is_approved = True
+            app.save()
+            Application.delete()
+        else:
+            Application.delete()
+        
+        data = {
+            'message':'Done'
+        }
+        return JsonResponse(data)
+    return HttpResponse("done")
+        
 
 

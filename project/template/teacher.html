@@ -122,16 +122,37 @@
                                                     <tr>
                                                         <th scope="row">{{attendence.lacture}}</th>
                                                         <td>{{attendence.subject.name}}</td>
-                                                        <td>{{attendence.student.user.first_name}}</td>
-                                                        <td>{{attendence.status}}</td>
+                                                        <td>{{attendence.student.user.first_name}}
+                                                            {{attendence.student.user.last_name}}
+                                                        </td>
+                                                        <td>
+                                                            {% if attendence.status %}
+                                                                Present
+                                                            {% else %}
+                                                                Absent
+                                                            {% endif %}
+                                                        </td>
                                                         <!-- <td></td> -->
                                                         <td>
-                                                            <button type="button" 
-                                                            onclick="MarkPresent({{attendence.student.id}},{{attendence.lacture}}, {{attendence.subject.id}}, {{attendence.smester}} )" 
-                                                            class="btn btn-outline-primary">P</button>
-                                                            <button type="button" 
-                                                            onclick="MarkAbsent({{attendence.student.id}},{{attendence.lacture}}, {{attendence.subject.id}}, {{attendence.smester}})" 
-                                                            class="btn btn-outline-danger">A</button>
+                                                            <button type="button" id="P-{{attendence.student.id}}"
+                                                            onclick="MarkStudentAttendence({{attendence.student.id}},{{attendence.lacture}}, {{attendence.subject.id}}, {{attendence.smester}}, 'P' )" 
+                                                            class="btn 
+                                                            {% if attendence.status %}
+                                                                btn-success
+                                                            {% else %}
+                                                                btn-outline-primary
+                                                            {% endif %}
+                                                            ">P</button>
+                                                            
+                                                            <button type="button" id="A-{{attendence.student.id}}"
+                                                            onclick="MarkStudentAttendence({{attendence.student.id}},{{attendence.lacture}}, {{attendence.subject.id}}, {{attendence.smester}}, 'A')" 
+                                                            class="btn 
+                                                            {% if not attendence.status %}
+                                                                btn-danger
+                                                            {% else %}
+                                                                btn-outline-danger
+                                                            {% endif %}
+                                                            ">A</button>
                                                         </td>
                                                       </tr>
                                                       {% endfor %}
@@ -145,63 +166,110 @@
 
                             </div>
                            <script>
-                                    function MarkPresent(std_id, lacture, sub_id, smester){
+                                    function getCSRFToken() {
+                                            var cookies = document.cookie.split(';');
+                                            for (var i = 0; i < cookies.length; i++) {
+                                                var cookie = cookies[i].trim();
+                                                if (cookie.startsWith('csrftoken=')) {
+                                                    return cookie.substring('csrftoken='.length, cookie.length);
+                                                }
+                                            }
+                                            return null;
+                                        }
+
+                                    function MarkStudentAttendence(std_id, lacture, sub_id, smester, lable){
                                         console.log('ID', std_id)
                                         console.log('Lacture', lacture)
                                         console.log('sub id', sub_id)
                                         console.log('smester', smester)
+                                        console.log('lable', lable)
+                                        var csrfToken  = getCSRFToken()
                                         $.ajax({
                                             type: "POST",
                                             url: '/markAttendence/',
                                             data: {
-                                                'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                                                'csrfmiddlewaretoken': csrfToken ,
                                                 'std_id':std_id,
-                                                'lable':'p',
+                                                'lable': lable,
                                                 'lacture':lacture,
                                                 'sub_id':sub_id,
+                                                'smester':smester,
 
                                             },
                                             success: function (data) {
-                                                console.log(data)
+                                                if(lable==='P'){
+                                                    $(`#P-${std_id}`).removeClass('btn-outline-primary')
+                                                    $(`#P-${std_id}`).addClass('btn-success')
+                                                    
+                                                    $(`#A-${std_id}`).removeClass('btn-danger')
+                                                    $(`#A-${std_id}`).addClass('btn-outline-danger')
+                                                }
+                                                else{
+                                                    $(`#P-${std_id}`).removeClass('btn-success')
+                                                    $(`#P-${std_id}`).addClass('btn-outline-primary')
+                                                    
+                                                    $(`#A-${std_id}`).removeClass('btn-outline-danger')
+                                                    $(`#A-${std_id}`).addClass('btn-danger')
+                                                }
                                             }
                                         })
                                     }
 
-                                    function MarkAbsent(id){
-                                        console.log("Absent function called", id)
-                                    }
+                                
                             
                            </script>
 
                             <div class="tab-pane" id="messages">
-                                {% for pending_connection_user in pending_connection_users %}
+                                {% for app in Applications %}
                                 <div class="alert alert-info alert-dismissible" role="alert">
                                     <!-- <button type="button" class="close" data-dismiss="alert">×</button> -->
                                     <div class="alert-icon">
                                         <i class="icon-info"></i>
                                     </div>
                                     <div class="alert-message d-flex justify-content-between">
-                                        <span><strong>@{{pending_connection_user.username}}</strong> sends a connection request.</span>
-                                        <div>
-                                        <form action="{% url 'confirm_connection' %}" method="post">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="id" value="{{student.id}}"> 
-                                            <input type="hidden" name="request_student" value="{{pending_connection_user.id}}"> 
-                                            <input type="hidden" name="lable" value="reject"> 
-                                            <button type="submit" class="btn btn-outline-danger">Reject</button>
-                                        </form>
-                                        <form action="{% url 'confirm_connection' %}" method="post">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="id" value="{{student.id}}"> 
-                                            <input type="hidden" name="request_student" value="{{pending_connection_user.id}}"> 
-                                            <input type="hidden" name="lable" value="accept"> 
-                                            <button type="submit" class="btn btn-outline-success">Accept</button>
-                                        </form>
+                                        <span>
+                                            <strong>{{app.application.student.user.first_name}}-
+                                                    {{app.application.student.roll_no}}</strong><br>
+                                                    {{app.application.title}} 
+                                                    <a class="icon-link" href="#" id="show-btn-{{app.application.student.id}}" onclick="showMessage({{app.application.student.id}})">
+                                                        show message
+                                                        <svg class="bi" aria-hidden="true"><use xlink:href="#arrow-right"></use></svg>
+                                                      </a>
+
+                                                    <br><p class="visually-hidden" id="message-{{app.application.student.id}}">{{app.application.message}}</p>
+                                                </span>
+                                                    <div>
+                                                            
+                                            <button type="button" onclick="handleRequests({{app.application.id}}, 'R')" class="btn btn-outline-danger">Reject</button>
+                                            <button type="button" onclick="handleRequests({{app.application.id}}, 'A')" class="btn btn-outline-success">Accept</button>
                                         </div>
                                         
                                     </div>
                                 </div>
                                 {% endfor %}
+                                <script>
+                                    function showMessage(std_id){
+                                        console.log("press on key")
+                                        $(`#message-${std_id}`).toggleClass('visually-hidden')
+                                    }
+
+                                    function handleRequests(app_id, lable){
+                                        csrfToken = getCSRFToken();
+                                        $.ajax({
+                                            type:"POST",
+                                            url: '/accept_Reject_Applications/',
+                                            data:{
+                                                'csrfmiddlewaretoken': csrfToken,
+                                                'app_id':app_id,
+                                                'lable':lable,
+                                            },
+                                            success:function(data){
+                                                console.log(data)
+                                            }
+                                        })
+                                        
+                                    }
+                                </script>
                                 <table class="table table-hover table-striped">
                                     <tbody>
                                         {% if chats %}
