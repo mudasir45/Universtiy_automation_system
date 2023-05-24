@@ -114,11 +114,11 @@
                                    
                                     <div class="col-md-8">
                                         <hr>
-                                        <form action="{% url 'teacher' %}" method="POST" id="Check-attendance">
+                                        <form action="{% url 'teacher' %}" method="POST">
                                             {% csrf_token %}
                                             <h5 class="mt-2 mb-3 custom-text111">Mark Attendance</h5>
                                             <div class="d-flex align-items-center mb-3">
-                                                <select class="form-select border-1 semester1 space" name="semester" aria-label="Default select example" style="margin-right: 5px;">
+                                                <select class="form-select border-1 semester1 space" name="smester" aria-label="Default select example" style="margin-right: 5px;">
                                                     <option selected>Semester</option>
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
@@ -129,7 +129,7 @@
                                                     <option value="7">7</option>
                                                     <option value="8">8</option>
                                                 </select>
-                                                <select class="form-select border-1 space" name="sub" aria-label="Default select example" style="margin-right: 5px;">
+                                                <select class="form-select border-1 space" name="sub_id" aria-label="Default select example" style="margin-right: 5px;">
                                                     <option selected>Subject</option>
                                                     {% for subject in Subjects %}
                                                     <option value="{{ subject.id }}">{{ subject.name }}</option>
@@ -244,7 +244,7 @@
                                                     $(`#A-${std_id}`).removeClass('btn-danger')
                                                     $(`#A-${std_id}`).addClass('btn-outline-danger')
                                                 }
-                                                else{
+                                                else if (lable==='A'){
                                                     $(`#P-${std_id}`).removeClass('btn-success')
                                                     $(`#P-${std_id}`).addClass('btn-outline-primary')
                                                     

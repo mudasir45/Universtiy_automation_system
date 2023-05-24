@@ -9,7 +9,7 @@ class department(models.Model):
         return self.name
 
 class student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     roll_no = models.CharField(max_length=50, null=True, blank=True)
     department = models.ForeignKey(department, on_delete=models.CASCADE, null=True, blank=True)
     subjects = models.ForeignKey('subject', on_delete=models.CASCADE, null=True, blank=True)
@@ -49,7 +49,7 @@ class attendence(models.Model):
         return f'{self.student.user.first_name} - {self.subject}  - {self.lacture} - smester = {self.smester} ==> {self.status}'
 
 class teachers(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     designation = models.CharField(max_length=50, null=True, blank=True)
     department = models.ForeignKey('department', on_delete=models.CASCADE ,null=True, blank=True)
     subject = models.ForeignKey(subject, on_delete=models.CASCADE, null=True, blank=True)
@@ -58,7 +58,7 @@ class teachers(models.Model):
         return self.user.first_name
     
 class HOD(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     designation = models.CharField(max_length=50, null=True, blank=True)
     department = models.ForeignKey('department', on_delete=models.CASCADE, null=True, blank=True)
     img = models.ImageField(upload_to='HOD', null=True, blank=True)
@@ -66,7 +66,7 @@ class HOD(models.Model):
         return self.user.first_name
 
 class gpa(models.Model):
-    student = models.OneToOneField(student, on_delete=models.CASCADE, null=True, blank=True)
+    student = models.ForeignKey(student, on_delete=models.CASCADE, null=True, blank=True)
     gpa = models.FloatField(null=True, blank=True)
     def __str__(self) -> str:
         return self.student.user.first_name
