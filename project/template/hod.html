@@ -18,6 +18,9 @@
 </head>
 
 <style>
+    .custom-cursor{
+        cursor: pointer;
+    }
     .container {
         position: relative;
         top: 3px; /* Adjust this value to move the container down */
@@ -652,8 +655,10 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h5 class="text-primary tougle-btn"><u> Allocate Subject</u></h5>
-                                        <div class="border rounded-1 p-3 mt-2">
+                                        <div class="d-flex ">
+                                            <h5 class="text-primary link-info m-3 custom-cursor" onclick="toggle_data(1)" ><u> Allocate Subject</u> <i class="fa fa-arrow-right"></i></h5>
+                                        </div>
+                                        <div class="border rounded-1 p-3 mt-2 toggle-data-1 visually-hidden">
                                             <form action="{% url 'allocate_subject' %}" method="post">
                                                 {% csrf_token %}
                                             <select class="form-select form-control mt-2 mb-2" name="thr_id" aria-label="Default select example">
@@ -672,10 +677,11 @@
                                         </form>
                                           </div>
 
-
-                                          <h5 class="text-primary"><u> Add Teacher</u></h5>
+                                          <div class="d-flex ">
+                                            <h5 class="text-primary link-info m-3 custom-cursor" onclick="toggle_data(2)" ><u> Add Teacher</u> <i class="fa fa-arrow-right"></i></h5>
+                                        </div>
                                         <!-- <button type="button" class="btn btn-primary ">Add Teacher</button> -->
-                                        <div class="border rounded-1 p-3 mt-2">
+                                        <div class="border rounded-1 p-3 mt-2 toggle-data-2 visually-hidden" >
                                             <form action="{% url 'add_teacher' %}" method="post">
                                                 {% csrf_token %}
                                             <select class="form-select form-control mt-2 mb-2" name="user_id" aria-label="Default select example">
@@ -688,9 +694,11 @@
                                         </form>
                                         </div>
 
-                                        <h5 class="text-primary"><u> Add Student</u></h5>
+                                        <div class="d-flex">
+                                            <h5 class="text-primary link-info m-3 custom-cursor " onclick="toggle_data(3)" ><u> Add Student</u> <i class="fa fa-arrow-right"></i></h5>
+                                        </div>
                                         <!-- <button type="button" class="btn btn-primary " >Add Student</button> -->
-                                        <div class="border rounded-1 p-3 mt-2">
+                                        <div class="border rounded-1 p-3 mt-2 toggle-data-3 visually-hidden">
                                             <form action="{% url 'add_student' %}" method="post">
                                                 {% csrf_token %}
                                             <select class="form-select form-control mt-2 mb-2" name="user_id" aria-label="Default select example">
@@ -703,9 +711,11 @@
                                             </form>
                                           </div>
 
-                                          <h5 class="text-primary"><u> Add Subject</u></h5>
+                                          <div class="d-flex ">
+                                            <h5 class="text-primary link-info m-3 custom-cursor" onclick="toggle_data(4)"><u> Add Subject</u> <i class="fa fa-arrow-right"></i></h5>
+                                        </div>
                                             <!-- <button type="button" class="btn btn-primary " >Add Subject</button> -->
-                                            <div class="border rounded-1 p-3 mt-2">
+                                            <div class="border rounded-1 p-3 mt-2 toggle-data-4 visually-hidden">
                                                 <form action="{% url 'add_subject' %}" method="post">
                                                     {% csrf_token %}
                                                 <input type="text" name="sub_name" id="" class="form-control">
@@ -741,6 +751,12 @@
 
                                 </div>
 
+                                <script>
+                                    function toggle_data(id){
+                                        console.log("press on key", id)
+                                        $(`.toggle-data-${id}`).toggleClass('visually-hidden')
+                                    }
+                                </script>
                                 <div class="row">
                                     <div class="col-md-8">
                                         <hr>

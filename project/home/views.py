@@ -13,6 +13,7 @@ from .models import gpa
 from .models import teachers
 from .models import subject
 from .models import application_request
+from .models import pending_applications
 from .models import department
 
 # Create your views here.
