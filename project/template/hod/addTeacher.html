@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>Add Programming languages</title>
+  <title>Add Teacher</title>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css'>
   <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.3.1/css/all.css'><link rel="stylesheet" href="./style.css">
 <style>
@@ -69,7 +69,7 @@ h4 {
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="exampleModalLabel">Create Account</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Teacher</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -78,18 +78,17 @@ h4 {
         {% csrf_token %}
         <div class="modal-body">
           <div class="form-group">
-            <label for="teacher_id">Teacher*</label>
-            <select class="form-select form-control" name="teacher_id" aria-label="Default select example">
-              <option selected>Select the Teacher</option>
-              {% for teacher in Teachers %}
-              <option value="{{teacher.id}}">{{teacher.user.first_name}} {{teacher.user.last_name}}</option>
+            <label for="teacher_id">Select User*</label>
+            <select class="form-select form-control" name="user_id" aria-label="Default select example">
+              <option selected>Select the User</option>
+              {% for user in Users %}
+              <option value="{{user.id}}">{{user.username}}</option>
               {% endfor %}
             </select>
           </div>
           <div class="form-group">
             <label for="std_id">Title*</label>
             <input type="text" class="form-control" name="title" >
-
           </div>
           <input type="hidden" name="std_id" value="{{Student.id}}">
          

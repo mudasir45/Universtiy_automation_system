@@ -76,7 +76,7 @@ class attendence(models.Model):
 class teachers(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     designation = models.CharField(max_length=50, null=True, blank=True)
-    department = models.ManyToManyField('department', blank=True)
+    department = models.ForeignKey('department', on_delete=models.CASCADE ,null=True, blank=True)
     subject = models.ForeignKey(subject, on_delete=models.CASCADE, null=True, blank=True)
     img = models.ImageField(upload_to='teachers', null=True, blank=True)
     def __str__(self) -> str:
@@ -85,7 +85,7 @@ class teachers(models.Model):
 class HOD(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     designation = models.CharField(max_length=50, null=True, blank=True)
-    department = models.ManyToManyField('department', blank=True)
+    department = models.ForeignKey('department', on_delete=models.CASCADE, null=True, blank=True)
     img = models.ImageField(upload_to='HOD', null=True, blank=True)
     def __str__(self) -> str:
         return self.user.first_name

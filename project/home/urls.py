@@ -12,4 +12,8 @@ urlpatterns = [
     path('teacher/', views.teacher, name='teacher'),
     path('markAttendence/', views.markAttendence, name='markAttendence'),
     path('accept_Reject_Applications/', views.accept_Reject_Applications, name='accept_Reject_Applications'),
+    path('submit_application/', views.submit_application, name='submit_application'),
+    
+    path('hod/', views.hod, name='hod'),
+    path('allocate_subject/', views.allocate_subject, name='allocate_subject'),
 ]

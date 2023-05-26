@@ -34,7 +34,7 @@
 
          .custom-text111{
             font-family: 'Merriweather', serif;
-            font-size: 35px;
+            font-size: 25px;
             font-weight: bold;
          }
 
@@ -551,11 +551,12 @@
                     <div class="card" style="color: #5E8ED6;">
                         <div class="card-body text-center custom-bg rounded-top" >
                             <div class="user-box mt-5">
-                                <img src="{{Student.img.url}}" alt="user avatar">
+                                <img src="{{hod.img.url}}" alt="user avatar">
                             </div>
                             <span class="badge badge-success custom-text mt-3"><i class="fas fa-user-graduate"></i> Student Portal</span>
-                            <h5 class="mb-1 text-white custom-text">{{Student.user.first_name}} {{Student.user.last_name}}</h5>
-                            <h6 class="text-light custom-text"><strong>{{Student.department}}</strong></h6>
+                            <h5 class="mb-1 text-white custom-text">{{hod.user.first_name}} {{hod.user.last_name}}</h5>
+                            <h6 class="text-light custom-text"><strong>{{hod.designation}}</strong></h6>
+                            <h5 class="text-light custom-text"><strong>{{hod.department.name}}</strong></h5>
                             
                             <h3 class="text-light text-danger custom-text">University Of Okara</h3>
                                 <!-- <button class="btn btn-danger">Appriciate</button>
@@ -563,7 +564,7 @@
                         </div>
                         
                         <div class="card-footer text-center social-icons">
-                                <a href=""><i class="mr-2 fa-brands fa-facebook"></i></a>
+                                <a href=""><i class="mr-5 fa-brands fa-facebook"></i></a>
                                 <a href=""><i class="mr-2 fa-brands fa-github"></i></i></a>
                                 <a href=""><i class="mr-2 fa-brands fa-google"></i></a>
                                 <a href=""><i class="mr-2 fa-brands fa-square-instagram"></i></a>
@@ -595,8 +596,9 @@
                             <div class="tab-pane active show" id="profile">
                                 <!-- <h2 class="mb-3 custom-text11 text-center"> <strong> Current GPA = </strong> {{GPA.gpa}}</h2> -->
                                 <div class="col-md-12 text-center">
-                                    <h4 class="d-inline-block space mb-3 mt-1 custom-text111">Check Your Result</h4>
-                                    <div class="btn-group">
+                                    <h4 class="d-inline-block space mb-3 mt-1 custom-text111">Department</h4>
+                                    <h2 class="d-inline-block space mb-3 mt-1 custom-text111">{{hod.department.name}}</h2>
+                                    <!-- <div class="btn-group">
                                         <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             Semester
                                         </button>
@@ -610,40 +612,34 @@
                                             <li><a class="dropdown-item" href="{% url 'checkMarks' 7 %}">7</a></li>
                                             <li><a class="dropdown-item" href="{% url 'checkMarks' 8 %}">8</a></li>
                                         </ul>
-                                    </div>
+                                    </div> -->
                                     <div class="row justify-content-center">
                                         <div class="col-md-12">
-                                            <h3 class="mb-3  mt-2 custom-text11 text-center">Current GPA = {{GPA.gpa}}</h3>
+                                            <h3 class="mb-3  mt-2 text-primary custom-text11 text-center">Teachers details </h3>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                
                                 
                                 <div class="row">
                                     <div class="col-md-12 mt-2">
                                         <table class="table border">
                                             <thead>
                                                 <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Designation</th>
+                                                    <th scope="col">Department</th>
                                                     <th scope="col">Subject</th>
-                                                    <th scope="col">Instructor</th>
-                                                    <th scope="col">Marks</th>
-                                                    <th scope="col">GPA</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for mark in Marks %}
+                                                {% for teacher in Teachers %}
                                                 <tr>
-                                                    <th scope="row">{{ mark.subject.name }}</th>
-                                                    <td>
-                                                        {% for teacher in Teachers %} 
-                                                        {% if teacher.subject == mark.subject %}
-                                                        {{ teacher }}
-                                                        {% endif %}
-                                                        {% endfor %}
-                                                    </td>
-                                                    <td>{{ mark.marks }}</td>
-                                                    <td>{{ mark.gpa }}</td>
+                                                    <th scope="row">{{teacher.id}}</th>
+                                                    <td>{{ teacher.user.first_name }} {{ teacher.user.last_name }}</td>
+                                                    <td>{{ teacher.designation }}</td>
+                                                    <td>{{ teacher.department.name }}</td>
+                                                    <td>{{ teacher.subject }}</td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
@@ -652,16 +648,73 @@
                                 </div>
                                 
                                 <div class="row">
-                                    <div class="col-md-6 ">
-                                        <h4 class="custom-text11">Submit an application</h4>
+                                    <h4>Actions</h4>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5 class="text-primary"><u> Allocate Subject</u></h5>
+                                        <div class="border rounded-1 p-3 mt-2">
+                                            <form action="{% url 'allocate_subject' %}" method="post">
+                                                {% csrf_token %}
+                                            <select class="form-select form-control mt-2 mb-2" name="thr_id" aria-label="Default select example">
+                                                <option selected>Select the Teacher</option>
+                                                {% for teacher in Teachers %}
+                                                <option value="{{teacher.id}}">{{teacher.user.first_name}} {{teacher.user.last_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <select class="form-select form-control mt-2" name="sub_id" aria-label="Default select example">
+                                                <option selected>Select the Subject from list</option>
+                                                {% for subject in Subjects %}
+                                                <option value="{{subject.id}}">{{subject.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button type="submit" class="btn btn-info mt-2">submit</button>
+                                        </form>
+                                          </div>
                                     </div>
-                                    <div class="col-md-6 d-flex align-items-center justify-content-end">
-                                        {% include 'application_form.html' %}
-                                        <!-- <button class="btn btn-primary">Submit here</button> -->
-                                        <button type="button" class="btn btn-primary ml-0" data-toggle="modal" data-target="#add_Programming_language">Submit here</button>
+                                    <div class="col-md-6">
+                                        <h5 class="text-primary"><u> Add Teacher</u></h5>
+                                        <!-- <button type="button" class="btn btn-primary ">Add Teacher</button> -->
+                                        <div class="border rounded-1 p-3 mt-2">
+                                            <select class="form-select form-control mt-2 mb-2" name="user_id" aria-label="Default select example">
+                                                <option selected>Select the User</option>
+                                                {% for user in Users %}
+                                                <option value="{{user.id}}">{{user.username}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button class="btn btn-info mt-2">submit</button>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <h5 class="text-primary"><u> Add Student</u></h5>
+                                            <!-- <button type="button" class="btn btn-primary " >Add Student</button> -->
+                                            <div class="border rounded-1 p-3 mt-2">
+                                                <select class="form-select form-control mt-2 mb-2" name="user_id" aria-label="Default select example">
+                                                    <option selected>Select the User</option>
+                                                    {% for user in Users %}
+                                                    <option value="{{user.id}}">{{user.username}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <button class="btn btn-info mt-2">submit</button>
+                                              </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="text-primary"><u> Add Subject</u></h5>
+                                            <!-- <button type="button" class="btn btn-primary " >Add Subject</button> -->
+                                            <div class="border rounded-1 p-3 mt-2">
+                                                <select class="form-select form-control mt-2 mb-2" name="user_id" aria-label="Default select example">
+                                                    <option selected>Select the Subject list</option>
+                                                    {% for subject in Subjects %}
+                                                    <option value="{{subject.id}}">{{subject.name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <button class="btn btn-info mt-2">submit</button>
+                                              </div>
+                                        </div>
+
                                     </div>
                                 </div>
-                                
 
                                 <div class="row">
                                     <div class="col-md-8">
