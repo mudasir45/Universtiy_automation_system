@@ -14,8 +14,12 @@ from .models import teachers
 from .models import subject
 from .models import application_request
 from .models import pending_applications
+from .models import department
 
 # Create your views here.
+def goToLogin(request):
+    return redirect('user_login')
+
 @login_required
 def home(request):
     curr_user = request.user
@@ -49,8 +53,10 @@ def user_login(request):
                 return redirect('home')
             elif lable == 'Teacher':
                 return redirect('teacher')
-            else:
+            elif lable == 'HOD':
                 return redirect('hod')
+            else:
+                return render(request, 'login.html')
     return render(request, 'login.html')
 
 def checkMarks(request, smester):
@@ -153,16 +159,20 @@ def resetPassord(request):
 
 @login_required
 def teacher(request):
-
     curr_user = request.user
     Teacher = teachers.objects.get(user = curr_user)
     Subjects = subject.objects.all()
     Applications = pending_applications.objects.filter(application__teacher=Teacher)
     if request.method == "POST":
-        Subject = request.POST.get('subject')
+        sub_id = request.POST.get('sub_id')
         smester = request.POST.get('smester')
-        lacture = request.POST.get('lacture')
+        lacture = request.POST.get('lecture')
+        Subject = subject.objects.get(id = sub_id)
+
+        
         Attendence_details = attendence.objects.filter(subject = Subject, smester = smester, lacture = lacture)
+        print("smester: ", smester)
+        print("lacture: ", lacture)
         print("Attendence detilas: ", Attendence_details)
         context = {
             'Attendence_details':Attendence_details,
@@ -251,13 +261,32 @@ def hod(request):
     curr_user = request.user
     Teachers = teachers.objects.all()
     Subjects = subject.objects.all()
+    Departments = department.objects.all()
     Students = student.objects.all()
     Users = User.objects.all()
     hod = HOD.objects.get(user = curr_user)
+
+    if request.method == 'POST':
+        std_id = request.POST.get('std_id')
+        smester = request.POST.get('smester')
+        dept_id = request.POST.get('dept_id')
+        Department = department.objects.get(id = dept_id)
+        Students = student.objects.filter(smester = smester, department = Department)
+        context = {
+        'Teachers': Teachers,
+        'Subjects': Subjects,
+        'Students': Students,
+        'Departments': Departments,
+        'hod': hod,
+        'Users': Users,
+        }
+        return render(request, 'hod.html', context)
+    
     context = {
         'Teachers': Teachers,
         'Subjects': Subjects,
         'Students': Students,
+        'Departments': Departments,
         'hod': hod,
         'Users': Users,
     }
@@ -271,5 +300,34 @@ def allocate_subject(request):
         Teacher = teachers.objects.get(id = thr_id)
         Teacher.subject = Subject
         Teacher.save()
+        return redirect('hod')
+    
+def add_teacher(request):
+    if request.method == "POST":
+        user_id = request.POST.get('user_id')
+        user = User.objects.get(id = user_id)
+        Teacher = teachers.objects.create(
+            user = user
+        )
+        Teacher.save()
+        return redirect('hod')
+    
+def add_student(request):
+    if request.method == "POST":
+        user_id = request.POST.get('user_id')
+        user = User.objects.get(id = user_id)
+        Student, get = student.objects.get_or_create(
+            user = user
+        )
+        Student.save()
+        return redirect('hod')
+
+def add_subject(request):
+    if request.method == "POST":
+        sub_name = request.POST.get('sub_name')
+        Subject, get = subject.objects.get_or_create(
+            name = sub_name
+        )
+        Subject.save()
         return redirect('hod')
         

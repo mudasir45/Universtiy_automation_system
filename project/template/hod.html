@@ -18,6 +18,9 @@
 </head>
 
 <style>
+    .custom-cursor{
+        cursor: pointer;
+    }
     .container {
         position: relative;
         top: 3px; /* Adjust this value to move the container down */
@@ -553,7 +556,7 @@
                             <div class="user-box mt-5">
                                 <img src="{{hod.img.url}}" alt="user avatar">
                             </div>
-                            <span class="badge badge-success custom-text mt-3"><i class="fas fa-user-graduate"></i> Student Portal</span>
+                            <span class="badge badge-success custom-text mt-3"><i class="fas fa-user-graduate"></i> HOD Portal</span>
                             <h5 class="mb-1 text-white custom-text">{{hod.user.first_name}} {{hod.user.last_name}}</h5>
                             <h6 class="text-light custom-text"><strong>{{hod.designation}}</strong></h6>
                             <h5 class="text-light custom-text"><strong>{{hod.department.name}}</strong></h5>
@@ -652,8 +655,10 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h5 class="text-primary"><u> Allocate Subject</u></h5>
-                                        <div class="border rounded-1 p-3 mt-2">
+                                        <div class="d-flex ">
+                                            <h5 class="text-primary link-info m-3 custom-cursor" onclick="toggle_data(1)" ><u> Allocate Subject</u> <i class="fa fa-arrow-right"></i></h5>
+                                        </div>
+                                        <div class="border rounded-1 p-3 mt-2 toggle-data-1 visually-hidden">
                                             <form action="{% url 'allocate_subject' %}" method="post">
                                                 {% csrf_token %}
                                             <select class="form-select form-control mt-2 mb-2" name="thr_id" aria-label="Default select example">
@@ -671,11 +676,14 @@
                                             <button type="submit" class="btn btn-info mt-2">submit</button>
                                         </form>
                                           </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h5 class="text-primary"><u> Add Teacher</u></h5>
+
+                                          <div class="d-flex ">
+                                            <h5 class="text-primary link-info m-3 custom-cursor" onclick="toggle_data(2)" ><u> Add Teacher</u> <i class="fa fa-arrow-right"></i></h5>
+                                        </div>
                                         <!-- <button type="button" class="btn btn-primary ">Add Teacher</button> -->
-                                        <div class="border rounded-1 p-3 mt-2">
+                                        <div class="border rounded-1 p-3 mt-2 toggle-data-2 visually-hidden" >
+                                            <form action="{% url 'add_teacher' %}" method="post">
+                                                {% csrf_token %}
                                             <select class="form-select form-control mt-2 mb-2" name="user_id" aria-label="Default select example">
                                                 <option selected>Select the User</option>
                                                 {% for user in Users %}
@@ -683,45 +691,78 @@
                                                 {% endfor %}
                                             </select>
                                             <button class="btn btn-info mt-2">submit</button>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-md-6">
-                                            <h5 class="text-primary"><u> Add Student</u></h5>
-                                            <!-- <button type="button" class="btn btn-primary " >Add Student</button> -->
-                                            <div class="border rounded-1 p-3 mt-2">
-                                                <select class="form-select form-control mt-2 mb-2" name="user_id" aria-label="Default select example">
-                                                    <option selected>Select the User</option>
-                                                    {% for user in Users %}
-                                                    <option value="{{user.id}}">{{user.username}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                                <button class="btn btn-info mt-2">submit</button>
-                                              </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h5 class="text-primary"><u> Add Subject</u></h5>
-                                            <!-- <button type="button" class="btn btn-primary " >Add Subject</button> -->
-                                            <div class="border rounded-1 p-3 mt-2">
-                                                <select class="form-select form-control mt-2 mb-2" name="user_id" aria-label="Default select example">
-                                                    <option selected>Select the Subject list</option>
-                                                    {% for subject in Subjects %}
-                                                    <option value="{{subject.id}}">{{subject.name}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                                <button class="btn btn-info mt-2">submit</button>
-                                              </div>
+                                        </form>
                                         </div>
 
+                                        <div class="d-flex">
+                                            <h5 class="text-primary link-info m-3 custom-cursor " onclick="toggle_data(3)" ><u> Add Student</u> <i class="fa fa-arrow-right"></i></h5>
+                                        </div>
+                                        <!-- <button type="button" class="btn btn-primary " >Add Student</button> -->
+                                        <div class="border rounded-1 p-3 mt-2 toggle-data-3 visually-hidden">
+                                            <form action="{% url 'add_student' %}" method="post">
+                                                {% csrf_token %}
+                                            <select class="form-select form-control mt-2 mb-2" name="user_id" aria-label="Default select example">
+                                                <option selected>Select the User</option>
+                                                {% for user in Users %}
+                                                <option value="{{user.id}}">{{user.username}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button class="btn btn-info mt-2">submit</button>
+                                            </form>
+                                          </div>
+
+                                          <div class="d-flex ">
+                                            <h5 class="text-primary link-info m-3 custom-cursor" onclick="toggle_data(4)"><u> Add Subject</u> <i class="fa fa-arrow-right"></i></h5>
+                                        </div>
+                                            <!-- <button type="button" class="btn btn-primary " >Add Subject</button> -->
+                                            <div class="border rounded-1 p-3 mt-2 toggle-data-4 visually-hidden">
+                                                <form action="{% url 'add_subject' %}" method="post">
+                                                    {% csrf_token %}
+                                                <input type="text" name="sub_name" id="" class="form-control">
+                                                <button class="btn btn-info mt-2">submit</button>
+                                                </form>
+                                              </div>
+
+
                                     </div>
+                                    <div class="col-md-6">
+                                        <h4>Department Details</h4>
+                                        <div style="border: 1px solid grey; border-radius: 10px; padding: 7px;">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">#</th>
+                                                        <th scope="col">Department Name</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for department in Departments %}
+                                                    <tr>
+                                                        <th scope="row">{{department.id}}</th>
+                                                        <td>{{ department.name }}</td>
+                                                        
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
                                 </div>
 
+                                <script>
+                                    function toggle_data(id){
+                                        console.log("press on key", id)
+                                        $(`.toggle-data-${id}`).toggleClass('visually-hidden')
+                                    }
+                                </script>
                                 <div class="row">
                                     <div class="col-md-8">
                                         <hr>
-                                        <form action="CheckAttendence" id="Check-attendence">
+                                        <form action="{% url 'hod' %}" method="POST">
                                             {% csrf_token %}
-                                            <h4 class="mt-2 mb-3 custom-text"> <b> Check Attendence </b></h4>
+                                            <h4 class="mt-2 mb-3 custom-text"> <b> Student Details </b></h4>
                                             <div class="row justify-content-center">
                                                 <div class="col-auto">
                                                     <select class="form-select mb-3 me-5 mr-2 border-1 smester1" name="smester" aria-label="Default select example">
@@ -737,10 +778,10 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <select class="form-select mb-3 me-5 border-1" name="subject" aria-label="Default select example">
-                                                        <option selected>Subject</option>
-                                                        {% for subject in Subjects %}
-                                                        <option value="{{subject.id}}">{{subject.name}}</option>
+                                                    <select class="form-select mb-3 me-5 border-1" name="dept_id" aria-label="Default select example">
+                                                        <option selected>Department</option>
+                                                        {% for department in Departments %}
+                                                        <option value="{{department.id}}">{{department.name}}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
@@ -756,14 +797,25 @@
                                             <table class="table">
                                                 <thead>
                                                     <tr>
-                                                        <th scope="col">Lecture</th>
-                                                        <th scope="col">Date</th>
+                                                        <th scope="col">#</th>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Roll No</th>
+                                                        <th scope="col">Depatment</th>
+                                                        <th scope="col">Section</th>
                                                         <th scope="col">Subject</th>
-                                                        <th scope="col">Status</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="attendance-details">
-                                
+                                                <tbody>
+                                                    {% for student in Students %}
+                                                    <tr>
+                                                        <th scope="row">{{student.id}}</th>
+                                                        <td>{{ student.user.first_name }} {{ student.user.last_name }}</td>
+                                                        <td>{{ student.roll_no }}</td>
+                                                        <td>{{ student.department.name }}</td>
+                                                        <td>{{ student.section }}</td>
+                                                        <td>{{ student.subject.name }}</td>
+                                                    </tr>
+                                                    {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -776,70 +828,6 @@
                            
                     
 
-                        <script>
-                            $(document).ready(function() {
-                            $('#Check-attendence').on('submit', function(event) {
-                                event.preventDefault();  // Prevent form submission
-
-                                // Get the CSRF token value from the cookie
-                                var csrfToken = getCookie('csrftoken');
-
-                                // Get the form data
-                                var formData = $(this).serialize();
-
-                                // Append the CSRF token to the form data
-                                formData += '&csrfmiddlewaretoken=' + csrfToken;
-                                
-
-                                // Make the AJAX request
-                                $.ajax({
-                                    type: 'POST',
-                                    url: '/CheckAttendence/',
-                                    data: formData,
-                                    success: function(response) {
-                                        // Update the attendance details in the table
-                                        var tableBody = document.getElementById('attendance-details');
-                                        tableBody.innerHTML = ''; // Clear existing table rows
-
-                                        response.attendance.forEach(function(item, index) {
-                                        var newRow = document.createElement('tr');
-                                        var statusText = item.status ? 'Present' : 'Absent'; // Check status and set the corresponding text
-                                        newRow.innerHTML = '<th scope="row">' + item.lacture + '</th>' +
-                                            '<td>' + item.date + '</td>' +
-                                            '<td>' + item.subject + '</td>' +
-                                            '<td>' + statusText + '</td>';
-                                        tableBody.appendChild(newRow);
-
-                                            });
-                                        },
-                                        error: function(xhr) {
-                                            // Handle error
-                                            console.log(xhr.responseText);
-                                        }
-                                    });
-                            });
-
-                            // Function to get the CSRF token value from the cookie
-                            function getCookie(name) {
-                                var cookieValue = null;
-                                if (document.cookie && document.cookie !== '') {
-                                    var cookies = document.cookie.split(';');
-                                    for (var i = 0; i < cookies.length; i++) {
-                                        var cookie = cookies[i].trim();
-                                        // Check if the cookie name matches the csrfmiddlewaretoken format
-                                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                            break;
-                                        }
-                                    }
-                                }
-                                return cookieValue;
-                            }
-
-                            
-});
-
-                        </script>
                         
                             
                             
