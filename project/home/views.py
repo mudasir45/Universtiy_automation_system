@@ -330,4 +330,5 @@ def add_subject(request):
         )
         Subject.save()
         return redirect('hod')
-        
+
+
